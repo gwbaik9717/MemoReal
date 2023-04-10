@@ -1,7 +1,12 @@
 import React from "react";
+import Panel from "./components/Panel/Panel";
 
 const App: React.FC = () => {
-  return <div>{"Hello2, World!"}</div>;
+  return (
+    <div>
+      <Panel>content</Panel>
+    </div>
+  );
 };
 
 export default App;

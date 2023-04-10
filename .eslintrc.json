@@ -15,7 +15,23 @@
     "semi": ["error", "always"],
     "quotes": ["error", "double"],
     "no-multiple-empty-lines": ["error", { "max": 5 }],
+    "space-before-function-paren": "off",
     "@typescript-eslint/semi": ["error", "always"],
-    "@typescript-eslint/quotes": ["error", "double"]
+    "@typescript-eslint/quotes": ["error", "double"],
+    "@typescript-eslint/space-before-function-paren": "off",
+    "@typescript-eslint/member-delimiter-style": [
+      "error",
+      {
+        "multiline": {
+          "delimiter": "semi",
+          "requireLast": true
+        },
+        "singleline": {
+          "delimiter": "semi",
+          "requireLast": true
+        }
+      }
+    ],
+    "@typescript-eslint/strict-boolean-expressions": "off"
   }
 }
