@@ -1,5 +1,8 @@
 import React from "react";
 import styled from "styled-components";
+import { useDispatch, useSelector } from "react-redux";
+import type { RootState } from "../../store/modules";
+import { addElement as addPageElement } from "../../store/modules/page";
 
 const StyledSidebar = styled.div`
   background-color: gray;
@@ -13,8 +16,12 @@ const StyledSidebar = styled.div`
 `;
 
 const Sidebar: React.FC = () => {
-  const addElement = (): void => {
-    console.log("Add Element");
+  const page = useSelector((state: RootState) => state.page);
+
+  const dispatch = useDispatch();
+
+  const addElement = () => {
+    dispatch(addPageElement());
   };
 
   return (

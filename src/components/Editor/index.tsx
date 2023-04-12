@@ -1,5 +1,5 @@
 import React from "react";
-import Canvas from "../Canvas";
+import Canvas from "../Page";
 import Sidebar from "../Sidebar";
 import styled from "styled-components";
 
