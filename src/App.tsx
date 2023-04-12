@@ -1,10 +1,17 @@
 import React from "react";
-import Panel from "./components/Panel/Panel";
+import { createGlobalStyle } from "styled-components";
+import reset from "styled-reset";
+import Diary from "./components/Diary";
+
+const GlobalStyle = createGlobalStyle`
+  ${reset}
+`;
 
 const App: React.FC = () => {
   return (
     <div>
-      <Panel>content</Panel>
+      <GlobalStyle />
+      <Diary />
     </div>
   );
 };
