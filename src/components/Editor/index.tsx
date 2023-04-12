@@ -1,5 +1,5 @@
 import React from "react";
-import Canvas from "../Page";
+import Page from "../Page";
 import Sidebar from "../Sidebar";
 import styled from "styled-components";
 
@@ -10,7 +10,7 @@ const StyledEditor = styled.div`
 const Editor: React.FC = () => {
   return (
     <StyledEditor>
-      <Canvas />
+      <Page />
       <Sidebar />
     </StyledEditor>
   );

@@ -5,7 +5,7 @@ export interface Page {
 }
 
 interface Element {
-  id: number;
+  id: string;
 }
 
 const initialState: Page = {
@@ -22,7 +22,7 @@ export const pageSlice = createSlice({
         elements: state.elements.concat(action.payload)
       };
     },
-    removeElement(state, action: PayloadAction<number>) {
+    removeElement(state, action: PayloadAction<string>) {
       return {
         ...state,
         elements: state.elements.filter(

@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import Panel from "../Panel";
+import { useAppSelector } from "../../store/config";
 
 const StyledPage = styled.div`
   background-color: yellow;
@@ -9,10 +10,13 @@ const StyledPage = styled.div`
 `;
 
 const Page: React.FC = () => {
+  const { elements } = useAppSelector((state) => state.page);
+
   return (
     <StyledPage>
-      <Panel>content</Panel>
-      <Panel>content</Panel>
+      {elements.map((element) => (
+        <Panel key={element.id}>content</Panel>
+      ))}
     </StyledPage>
   );
 };

@@ -1,7 +1,8 @@
 import React from "react";
 import styled from "styled-components";
-import { useAppDispatch, useAppSelector } from "../../store/config";
+import { useAppDispatch } from "../../store/config";
 import { addElement as addPageElement } from "../../store/slices/pageSlice";
+import { v4 as uuid } from "uuid";
 
 const StyledSidebar = styled.div`
   background-color: gray;
@@ -15,16 +16,14 @@ const StyledSidebar = styled.div`
 `;
 
 const Sidebar: React.FC = () => {
-  const { elements } = useAppSelector((state) => state.page);
   const dispatch = useAppDispatch();
 
   const addElement = () => {
     dispatch(
       addPageElement({
-        id: 2
+        id: uuid()
       })
     );
-    console.log(elements);
   };
 
   return (
