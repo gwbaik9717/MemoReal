@@ -5,7 +5,7 @@ import Resizer from "./Resizer";
 import { Direction } from "./Resizer/constants";
 
 const StyledPanel = styled.div`
-  position: fixed;
+  position: absolute;
   top: 16px;
   left: 16px;
   width: 200px;
