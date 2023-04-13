@@ -1,11 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { Element } from "../../components/Designs/element";
 
 export interface Page {
   elements: Element[];
-}
-
-interface Element {
-  id: string;
 }
 
 const initialState: Page = {

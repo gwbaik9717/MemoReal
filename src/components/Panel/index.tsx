@@ -1,6 +1,5 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import PanelHeader from "./PanelHeader";
 import Resizer from "./Resizer";
 import { Direction } from "./Resizer/constants";
 
@@ -19,7 +18,8 @@ const StyledPanel = styled.div`
   }
 
   .panel_content {
-    padding: 4px;
+    width: 100%;
+    height: 100%;
   }
 `;
 
@@ -111,12 +111,45 @@ const Panel: React.FC<Props> = ({ children }) => {
     }
   };
 
+  const [mouseDown, setMouseDown] = useState(false);
+
+  useEffect(() => {
+    const handleMouseUp = (): void => {
+      setMouseDown(false);
+    };
+
+    window.addEventListener("mouseup", handleMouseUp);
+
+    return () => {
+      window.addEventListener("mouseup", handleMouseUp);
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent): void => {
+      handleDrag(e.movementX, e.movementY);
+    };
+
+    if (mouseDown) {
+      window.addEventListener("mousemove", handleMouseMove);
+    }
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+    };
+  }, [mouseDown, handleDrag]);
+
+  const handleMouseDown = (): void => {
+    setMouseDown(true);
+  };
+
   return (
     <StyledPanel className="panel" ref={panelRef}>
       <div className="panel_container">
         <Resizer onResize={handleResize} />
-        <PanelHeader onDrag={handleDrag} />
-        <div className="panel_content">{children}</div>
+        <div className="panel_content" onMouseDown={handleMouseDown}>
+          {children}
+        </div>
       </div>
     </StyledPanel>
   );
