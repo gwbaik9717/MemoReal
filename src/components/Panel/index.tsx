@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
+import Popover from "./Popover";
 import Resizer from "./Resizer";
 import { Direction } from "./Resizer/constants";
 
@@ -147,9 +148,12 @@ const Panel: React.FC<Props> = ({ children }) => {
     <StyledPanel className="panel" ref={panelRef}>
       <div className="panel_container">
         <Resizer onResize={handleResize} />
-        <div className="panel_content" onMouseDown={handleMouseDown}>
-          {children}
-        </div>
+
+        <Popover>
+          <div className="panel_content" onMouseDown={handleMouseDown}>
+            {children}
+          </div>
+        </Popover>
       </div>
     </StyledPanel>
   );
