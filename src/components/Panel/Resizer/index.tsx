@@ -51,38 +51,44 @@ const Resizer: React.FC<Props> = ({ onResize }) => {
   return (
     <>
       <div
-        className="top-left"
+        className="handler top-left"
         onMouseDown={handleMouseDown(Direction.TopLeft)}
       ></div>
 
-      <div className="top" onMouseDown={handleMouseDown(Direction.Top)}></div>
+      <div
+        className="handler top"
+        onMouseDown={handleMouseDown(Direction.Top)}
+      ></div>
 
       <div
-        className="top-right"
+        className="handler top-right"
         onMouseDown={handleMouseDown(Direction.TopRight)}
       ></div>
 
       <div
-        className="right"
+        className="handler right"
         onMouseDown={handleMouseDown(Direction.Right)}
       ></div>
 
       <div
-        className="right-bottom"
+        className="handler right-bottom"
         onMouseDown={handleMouseDown(Direction.BottomRight)}
       ></div>
 
       <div
-        className="bottom"
+        className="handler bottom"
         onMouseDown={handleMouseDown(Direction.Bottom)}
       ></div>
 
       <div
-        className="bottom-left"
+        className="handler bottom-left"
         onMouseDown={handleMouseDown(Direction.BottomLeft)}
       ></div>
 
-      <div className="left" onMouseDown={handleMouseDown(Direction.Left)}></div>
+      <div
+        className="handler left"
+        onMouseDown={handleMouseDown(Direction.Left)}
+      ></div>
     </>
   );
 };

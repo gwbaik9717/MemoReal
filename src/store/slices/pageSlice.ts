@@ -73,11 +73,44 @@ export const pageSlice = createSlice({
             : element
         )
       };
+    },
+    activateElement(state, action: PayloadAction<string>) {
+      return {
+        ...state,
+        elements: state.elements.map((element) =>
+          element.id === action.payload
+            ? {
+                ...element,
+                metadata: {
+                  ...element.metadata,
+                  isActivated: true
+                }
+              }
+            : element
+        )
+      };
+    },
+    deactivateAllElements(state) {
+      return {
+        ...state,
+        elements: state.elements.map((element) => ({
+          ...element,
+          metadata: {
+            isActivated: false
+          }
+        }))
+      };
     }
   }
 });
 
-export const { addElement, removeElement, moveElement, resizeElement } =
-  pageSlice.actions;
+export const {
+  addElement,
+  removeElement,
+  moveElement,
+  resizeElement,
+  activateElement,
+  deactivateAllElements
+} = pageSlice.actions;
 
 export default pageSlice;

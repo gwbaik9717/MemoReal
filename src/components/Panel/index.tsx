@@ -1,7 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { useAppDispatch } from "../../store/config";
-import { moveElement, resizeElement } from "../../store/slices/pageSlice";
+import {
+  activateElement,
+  deactivateAllElements,
+  moveElement,
+  resizeElement
+} from "../../store/slices/pageSlice";
 import { Element } from "../Designs/Element/element";
 import Popover from "./Popover";
 import Resizer from "./Resizer";
@@ -30,7 +35,10 @@ interface Props {
 
 const Panel: React.FC<Props> = ({ element, children }) => {
   const panelRef = useRef<null | HTMLDivElement>(null);
+  const [mouseDown, setMouseDown] = useState(false);
   const dispatch = useAppDispatch();
+
+  const { isActivated } = element.metadata;
 
   const dynamicPanelStyle = {
     top: `${element.y}px`,
@@ -124,8 +132,6 @@ const Panel: React.FC<Props> = ({ element, children }) => {
     }
   };
 
-  const [mouseDown, setMouseDown] = useState(false);
-
   useEffect(() => {
     const handleMouseUp = (): void => {
       setMouseDown(false);
@@ -152,20 +158,34 @@ const Panel: React.FC<Props> = ({ element, children }) => {
     };
   }, [mouseDown, handleDrag]);
 
-  const handleMouseDown = (): void => {
+  const handleMouseDown = (e: any): void => {
     setMouseDown(true);
+    e.stopPropagation();
+
+    if (!isActivated) {
+      dispatch(deactivateAllElements());
+      dispatch(activateElement(element.id));
+    }
   };
 
   return (
     <StyledPanel className="panel" ref={panelRef} style={dynamicPanelStyle}>
       <div className="panel_container">
-        <Resizer onResize={handleResize} />
+        {isActivated ? (
+          <>
+            <Resizer onResize={handleResize} />
 
-        <Popover>
+            <Popover>
+              <div className="panel_content" onMouseDown={handleMouseDown}>
+                {children}
+              </div>
+            </Popover>
+          </>
+        ) : (
           <div className="panel_content" onMouseDown={handleMouseDown}>
             {children}
           </div>
-        </Popover>
+        )}
       </div>
     </StyledPanel>
   );

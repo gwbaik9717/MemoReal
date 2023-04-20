@@ -1,3 +1,7 @@
+.handler {
+  background-color: magenta;
+}
+
 .top-left {
   position: absolute;
   cursor: nwse-resize;

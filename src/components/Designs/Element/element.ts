@@ -8,10 +8,10 @@ export class ElementMetadata {
 }
 
 export class Element {
-  x: number = 15;
-  y: number = 15;
-  width: number = 30;
-  height: number = 30;
+  x: number = 30;
+  y: number = 30;
+  width: number = 100;
+  height: number = 100;
   type!: ElementType;
   id!: string;
   metadata: ElementMetadata = new ElementMetadata();
