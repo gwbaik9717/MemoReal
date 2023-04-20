@@ -1,15 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
+import { useAppDispatch } from "../../store/config";
+import { moveElement, resizeElement } from "../../store/slices/pageSlice";
+import { Element } from "../Designs/Element/element";
 import Popover from "./Popover";
 import Resizer from "./Resizer";
 import { Direction } from "./Resizer/constants";
 
 const StyledPanel = styled.div`
   position: absolute;
-  top: 16px;
-  left: 16px;
-  width: 200px;
-  height: 200px;
   border: 1px solid black;
   box-sizing: border-box;
 
@@ -26,20 +25,32 @@ const StyledPanel = styled.div`
 
 interface Props {
   children: React.ReactNode;
+  element: Element;
 }
 
-const Panel: React.FC<Props> = ({ children }) => {
+const Panel: React.FC<Props> = ({ element, children }) => {
   const panelRef = useRef<null | HTMLDivElement>(null);
+  const dispatch = useAppDispatch();
+
+  const dynamicPanelStyle = {
+    top: `${element.y}px`,
+    left: `${element.x}px`,
+    width: `${element.width}px`,
+    height: `${element.height}px`
+  };
 
   const handleDrag = (movementX: number, movementY: number): void => {
     const panel = panelRef.current;
 
     if (!panel) return;
 
-    const { x, y } = panel.getBoundingClientRect();
-
-    panel.style.left = `${x + movementX}px`;
-    panel.style.top = `${y + movementY}px`;
+    dispatch(
+      moveElement({
+        id: element.id,
+        x: element.x + movementX,
+        y: element.y + movementY
+      })
+    );
   };
 
   const handleResize = (
@@ -50,61 +61,62 @@ const Panel: React.FC<Props> = ({ children }) => {
     const panel = panelRef.current;
     if (!panel) return;
 
-    const { width, height, x, y } = panel.getBoundingClientRect();
-
-    const resizeTop = (): void => {
-      panel.style.height = `${height - movementY}px`;
-      panel.style.top = `${y + movementY}px`;
+    const resizeBy = (dw: number, dh: number) => {
+      dispatch(
+        resizeElement({
+          id: element.id,
+          width: element.width + dw,
+          height: element.height + dh
+        })
+      );
     };
 
-    const resizeRight = (): void => {
-      panel.style.width = `${width + movementX}px`;
-    };
-
-    const resizeBottom = (): void => {
-      panel.style.height = `${height + movementY}px`;
-    };
-
-    const resizeLeft = (): void => {
-      panel.style.width = `${width - movementX}px`;
-      panel.style.left = `${x + movementX}px`;
+    const moveBy = (dx: number, dy: number) => {
+      dispatch(
+        moveElement({
+          id: element.id,
+          x: element.x + dx,
+          y: element.y + dy
+        })
+      );
     };
 
     switch (direction) {
       case Direction.TopLeft:
-        resizeTop();
-        resizeLeft();
+        moveBy(movementX, movementY);
+        resizeBy(-1 * movementX, -1 * movementY);
         break;
 
       case Direction.Top:
-        resizeTop();
+        moveBy(0, movementY);
+        resizeBy(0, -1 * movementY);
         break;
 
       case Direction.TopRight:
-        resizeTop();
-        resizeRight();
+        moveBy(0, movementY);
+        resizeBy(movementX, -1 * movementY);
         break;
 
       case Direction.Right:
-        resizeRight();
+        resizeBy(movementX, 0);
         break;
 
       case Direction.BottomRight:
-        resizeBottom();
-        resizeRight();
+        resizeBy(movementX, movementY);
         break;
 
       case Direction.Bottom:
-        resizeBottom();
+        resizeBy(0, movementY);
         break;
 
       case Direction.BottomLeft:
-        resizeBottom();
-        resizeLeft();
+        moveBy(movementX, 0);
+        resizeBy(-1 * movementX, movementY);
         break;
 
       case Direction.Left:
-        resizeLeft();
+        moveBy(movementX, 0);
+        resizeBy(-1 * movementX, 0);
         break;
 
       default:
@@ -145,7 +157,7 @@ const Panel: React.FC<Props> = ({ children }) => {
   };
 
   return (
-    <StyledPanel className="panel" ref={panelRef}>
+    <StyledPanel className="panel" ref={panelRef} style={dynamicPanelStyle}>
       <div className="panel_container">
         <Resizer onResize={handleResize} />
 

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useAppDispatch } from "../../store/config";
 import { addElement as addPageElement } from "../../store/slices/pageSlice";
-import { ImageElement } from "../Designs/element";
+import { ImageElement } from "../Designs/ImageElement/imageElement";
 
 const StyledSidebar = styled.div`
   background-color: gray;

@@ -16,6 +16,7 @@
     "quotes": ["error", "double"],
     "no-multiple-empty-lines": ["error", { "max": 5 }],
     "space-before-function-paren": "off",
+    "multiline-ternary": "off",
     "@typescript-eslint/semi": ["error", "always"],
     "@typescript-eslint/quotes": ["error", "double"],
     "@typescript-eslint/space-before-function-paren": "off",

@@ -1,8 +1,9 @@
 import React from "react";
 import styled from "styled-components";
-import Panel from "../Panel";
 import { useAppSelector } from "../../store/config";
-import { ElementType, ImageElement } from "../Designs/element";
+import type { ImageElement as ImageElementType } from "../Designs/ImageElement/imageElement";
+import { ElementType } from "../Designs/Element/element";
+import ImageElement from "../Designs/ImageElement";
 
 const StyledPage = styled.div`
   background-color: yellow;
@@ -15,20 +16,12 @@ const Page: React.FC = () => {
 
   const imageElements = elements.filter(
     (element) => element.type === ElementType.image
-  ) as ImageElement[];
+  ) as ImageElementType[];
 
   return (
     <StyledPage>
       {imageElements.map((element) => (
-        <Panel key={element.id}>
-          <img
-            draggable="false"
-            width="100%"
-            height="100%"
-            style={{ objectFit: "cover" }}
-            src={element.src}
-          />
-        </Panel>
+        <ImageElement key={element.id} element={element} />
       ))}
     </StyledPage>
   );
