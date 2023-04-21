@@ -41,6 +41,7 @@
     "css-loader": "^6.7.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-pageflip": "^2.0.3",
     "react-redux": "^8.0.5",
     "redux": "^4.2.1",
     "style-loader": "^3.3.2",
