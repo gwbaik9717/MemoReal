@@ -17,6 +17,8 @@
     "no-multiple-empty-lines": ["error", { "max": 5 }],
     "space-before-function-paren": "off",
     "multiline-ternary": "off",
+    "import/no-named-default": "off",
+    "indent": "off",
     "@typescript-eslint/semi": ["error", "always"],
     "@typescript-eslint/quotes": ["error", "double"],
     "@typescript-eslint/space-before-function-paren": "off",
@@ -37,6 +39,7 @@
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/consistent-type-imports": "off",
     "@typescript-eslint/no-misused-promises": "off",
-    "@typescript-eslint/promise-function-async": "off"
+    "@typescript-eslint/promise-function-async": "off",
+    "@typescript-eslint/indent": "off"
   }
 }

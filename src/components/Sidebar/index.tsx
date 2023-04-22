@@ -6,7 +6,7 @@ import { ImageElement } from "../Designs/ImageElement/imageElement";
 
 const StyledSidebar = styled.div`
   background-color: gray;
-  width: 200px;
+  width: 30px;
 
   button {
     width: 100%;

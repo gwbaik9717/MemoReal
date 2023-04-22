@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { useAppSelector } from "../../../store/config";
-import { PageMode } from "../../../store/slices/pageSlice";
+import { DiaryMode } from "../../../store/slices/diarySlice";
 import Panel from "../../Panel";
 import { Element as ElementType } from "./element";
 
@@ -15,7 +15,7 @@ const StyledViewerElement = styled.div`
 `;
 
 const Element: React.FC<Props> = ({ children, element }) => {
-  const { mode } = useAppSelector((state) => state.page);
+  const { mode } = useAppSelector((state) => state.diary);
   const { x, y, width, height } = element;
 
   const dynamicElementStyle = {
@@ -27,7 +27,7 @@ const Element: React.FC<Props> = ({ children, element }) => {
 
   return (
     <>
-      {mode === PageMode.editor ? (
+      {mode === DiaryMode.editor ? (
         <Panel element={element}>{children}</Panel>
       ) : (
         <StyledViewerElement style={dynamicElementStyle}>

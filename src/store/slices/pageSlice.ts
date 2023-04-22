@@ -1,14 +1,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Element } from "../../components/Designs/Element/element";
+import { generateId } from "../../utils/idUtils";
 
-export enum PageMode {
-  viewer = "viewer",
-  editor = "editor"
-}
+export class Page {
+  id: string;
+  elements: Element[] = [];
 
-export interface Page {
-  mode: PageMode;
-  elements: Element[];
+  constructor() {
+    this.id = generateId();
+  }
 }
 
 export interface PayloadElementPosition {
@@ -23,15 +23,17 @@ export interface PayloadElementSize {
   height: number;
 }
 
-const initialState: Page = {
-  mode: PageMode.editor,
-  elements: []
-};
+const initialState: Page = new Page();
 
 export const pageSlice = createSlice({
   name: "page",
   initialState,
   reducers: {
+    setEditingPage(state, action: PayloadAction<Page>) {
+      return {
+        ...action.payload
+      };
+    },
     addElement(state, action: PayloadAction<Element>) {
       return {
         ...state,
@@ -105,6 +107,7 @@ export const pageSlice = createSlice({
 });
 
 export const {
+  setEditingPage,
   addElement,
   removeElement,
   moveElement,

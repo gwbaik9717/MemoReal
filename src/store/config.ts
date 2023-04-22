@@ -1,8 +1,10 @@
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import pageSlice from "./slices/pageSlice";
+import diarySlice from "./slices/diarySlice";
 
 const rootReducer = combineReducers({
+  diary: diarySlice.reducer,
   page: pageSlice.reducer
 });
 
