@@ -175,11 +175,16 @@ const Panel: React.FC<Props> = ({ element, children }) => {
           <>
             <Resizer onResize={handleResize} />
 
+            <div className="panel_content" onMouseDown={handleMouseDown}>
+              {children}
+            </div>
+
+            {/* Resize Observer 오류 발생
             <Popover>
               <div className="panel_content" onMouseDown={handleMouseDown}>
                 {children}
               </div>
-            </Popover>
+            </Popover> */}
           </>
         ) : (
           <div className="panel_content" onMouseDown={handleMouseDown}>
