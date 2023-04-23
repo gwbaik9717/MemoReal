@@ -1,32 +1,50 @@
-import React, { useEffect, useState } from "react";
+import React, { useRef } from "react";
 import DiaryPage from "../Page";
 import Sidebar from "../Sidebar";
 import styled from "styled-components";
 import HTMLFlipBook from "react-pageflip";
-import { useAppDispatch, useAppSelector } from "../../store/config";
-import { DiaryMode } from "../../store/slices/diarySlice";
+import { useAppSelector } from "../../store/config";
 
 const StyledEditor = styled.div`
   display: flex;
+
+  .diary {
+    order: 1;
+  }
+
+  .diary_sidebar {
+    order: 3;
+  }
+
+  .btn {
+    background-color: yellow;
+  }
+
+  .btn.prev {
+    order: 0;
+  }
+
+  .btn.next {
+    order: 2;
+  }
 `;
 
 const Editor: React.FC = () => {
-  const { pages, mode } = useAppSelector((state) => state.diary);
+  const { pages } = useAppSelector((state) => state.diary);
   const editingPage = useAppSelector((state) => state.page);
-  const dispatch = useAppDispatch();
-
-  // const isViewerMode: boolean = mode === DiaryMode.viewer;
-  // console.log(isViewerMode);
+  const diary = useRef(null);
 
   return (
     <StyledEditor>
       {/* @ts-expect-error: 라이브러리 타입 정의 오류 */}
       <HTMLFlipBook
+        className="diary"
         width={550}
         height={733}
         maxShadowOpacity={0.5}
         usePortrait={false}
-        useMouseEvents={mode === DiaryMode.viewer}
+        useMouseEvents={false}
+        ref={diary}
       >
         {pages.map((page) => (
           <DiaryPage
@@ -34,31 +52,24 @@ const Editor: React.FC = () => {
             page={editingPage.id === page.id ? editingPage : page}
           />
         ))}
-        {/* {isViewerMode
-          ? pages.map((page) => (
-              <DiaryPage
-                key={page.id}
-                page={page}
-                setEditingPageId={setEditingPageId}
-              />
-            ))
-          : pages.map((page) =>
-              editingPageId === page.id ? (
-                <DiaryPage
-                  page={editingPage}
-                  setEditingPageId={setEditingPageId}
-                  key={page.id}
-                />
-              ) : (
-                <DiaryPage
-                  page={page}
-                  setEditingPageId={setEditingPageId}
-                  key={page.id}
-                />
-              )
-            )} */}
       </HTMLFlipBook>
-      {mode === DiaryMode.editor && <Sidebar />}
+      <button
+        className="btn prev"
+        onClick={() => {
+          (diary as any).current.pageFlip().flipPrev();
+        }}
+      >
+        Prev
+      </button>
+      <button
+        className="btn next"
+        onClick={() => {
+          (diary as any).current.pageFlip().flipNext();
+        }}
+      >
+        Next
+      </button>
+      <Sidebar />
     </StyledEditor>
   );
 };
