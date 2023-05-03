@@ -23,6 +23,14 @@ export interface PayloadElementSize {
   height: number;
 }
 
+export interface PayloadElementPositionAndSize {
+  id: string;
+  width: number;
+  height: number;
+  x: number;
+  y: number;
+}
+
 const initialState: Page = new Page();
 
 export const pageSlice = createSlice({
@@ -76,6 +84,25 @@ export const pageSlice = createSlice({
         )
       };
     },
+    setElementPositionAndSize(
+      state,
+      action: PayloadAction<PayloadElementPositionAndSize>
+    ) {
+      return {
+        ...state,
+        elements: state.elements.map((element) =>
+          element.id === action.payload.id
+            ? {
+                ...element,
+                x: action.payload.x,
+                y: action.payload.y,
+                width: action.payload.width,
+                height: action.payload.height
+              }
+            : element
+        )
+      };
+    },
     activateElement(state, action: PayloadAction<string>) {
       return {
         ...state,
@@ -112,6 +139,7 @@ export const {
   removeElement,
   moveElement,
   resizeElement,
+  setElementPositionAndSize,
   activateElement,
   deactivateAllElements
 } = pageSlice.actions;

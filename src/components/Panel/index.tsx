@@ -5,7 +5,7 @@ import {
   activateElement,
   deactivateAllElements,
   moveElement,
-  resizeElement
+  setElementPositionAndSize
 } from "../../store/slices/pageSlice";
 import { Element } from "../Designs/Element/element";
 import Popover from "./Popover";
@@ -69,62 +69,63 @@ const Panel: React.FC<Props> = ({ element, children }) => {
     const panel = panelRef.current;
     if (!panel) return;
 
-    const resizeBy = (dw: number, dh: number) => {
+    /*
+     * 만약 move 와 resize 를 각각 dispatch 하면
+     * 제대로 작동하지 않는 오류가 있어 이 둘을 동시에 처리
+     */
+    const setElementPositionAndSizeBy = (
+      dx: number = 0,
+      dy: number,
+      dw: number,
+      dh: number
+    ) => {
       dispatch(
-        resizeElement({
+        setElementPositionAndSize({
           id: element.id,
+          x: element.x + dx,
+          y: element.y + dy,
           width: element.width + dw,
           height: element.height + dh
         })
       );
     };
 
-    const moveBy = (dx: number, dy: number) => {
-      dispatch(
-        moveElement({
-          id: element.id,
-          x: element.x + dx,
-          y: element.y + dy
-        })
-      );
-    };
-
     switch (direction) {
       case Direction.TopLeft:
-        moveBy(movementX, movementY);
-        resizeBy(-1 * movementX, -1 * movementY);
+        setElementPositionAndSizeBy(
+          movementX,
+          movementY,
+          -1 * movementX,
+          -1 * movementY
+        );
         break;
 
       case Direction.Top:
-        moveBy(0, movementY);
-        resizeBy(0, -1 * movementY);
+        setElementPositionAndSizeBy(0, movementY, 0, -1 * movementY);
         break;
 
       case Direction.TopRight:
-        moveBy(0, movementY);
-        resizeBy(movementX, -1 * movementY);
+        setElementPositionAndSizeBy(0, movementY, movementX, -1 * movementY);
         break;
 
       case Direction.Right:
-        resizeBy(movementX, 0);
+        setElementPositionAndSizeBy(0, 0, movementX, 0);
         break;
 
       case Direction.BottomRight:
-        resizeBy(movementX, movementY);
+        setElementPositionAndSizeBy(0, 0, movementX, movementY);
         break;
 
       case Direction.Bottom:
-        resizeBy(0, movementY);
+        setElementPositionAndSizeBy(0, 0, 0, movementY);
         break;
 
       case Direction.BottomLeft:
-        moveBy(movementX, 0);
-        resizeBy(-1 * movementX, movementY);
+        setElementPositionAndSizeBy(movementX, 0, -1 * movementX, movementY);
         break;
 
       case Direction.Left:
-        moveBy(movementX, 0);
-        resizeBy(-1 * movementX, 0);
+        setElementPositionAndSizeBy(movementX, 0, -1 * movementX, 0);
         break;
 
       default:
