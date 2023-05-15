@@ -3,7 +3,8 @@ import { Page } from "./pageSlice";
 
 export enum DiaryMode {
   viewer = "viewer",
-  editor = "editor"
+  editor = "editor",
+  calendar = "calendar"
 }
 
 export interface Diary {
@@ -12,7 +13,7 @@ export interface Diary {
 }
 
 const initialState: Diary = {
-  mode: DiaryMode.viewer,
+  mode: DiaryMode.calendar,
   pages: [
     { id: "1", elements: [] },
     { id: "2", elements: [] },

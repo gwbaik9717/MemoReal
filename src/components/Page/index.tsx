@@ -53,7 +53,12 @@ const DiaryPage = forwardRef(function Page({ page }: Props, ref: any) {
   };
 
   return (
-    <StyledDiaryPage className="diary_page" onClick={handleClick} ref={ref}>
+    <StyledDiaryPage
+      className="diary_page"
+      data-density="hard"
+      onClick={handleClick}
+      ref={ref}
+    >
       <p>{page.id}</p>
       <button onClick={toggleDiaryMode}>
         {mode === DiaryMode.editor ? "View" : "Edit"}
