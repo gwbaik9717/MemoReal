@@ -16,6 +16,18 @@ const Diary: React.FC = () => {
   const dispatch = useAppDispatch();
   const { mode } = useAppSelector((state) => state.diary);
 
+  // key for rerendering HTMLFlipBook
+  const [key, setKey] = useState(0);
+
+  // state for initial calendar date
+  const [initialCalendarDate, setInitialCalendarDate] = useState(new Date());
+
+  const reload = (initialDate: Date) => {
+    // console.log(initialDate);
+    setInitialCalendarDate(initialDate);
+    setKey((prevKey) => prevKey + 1);
+  };
+
   return (
     <>
       <button
@@ -27,7 +39,15 @@ const Diary: React.FC = () => {
       </button>
 
       <StyledDiary className="diary">
-        {mode === DiaryMode.calendar ? <Calendar /> : <Editor />}
+        {mode === DiaryMode.calendar ? (
+          <Calendar
+            key={`diary-calendar-${key}`}
+            reload={reload}
+            initialDate={initialCalendarDate}
+          />
+        ) : (
+          <Editor />
+        )}
       </StyledDiary>
     </>
   );

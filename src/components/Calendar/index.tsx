@@ -1,8 +1,12 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import styled from "styled-components";
 import HTMLFlipBook from "react-pageflip";
-import { useAppSelector } from "../../store/config";
 import CalendarPage from "./page";
+
+interface Props {
+  reload: (initialDate: Date) => void;
+  initialDate: Date;
+}
 
 const StyledCalendar = styled.div`
   display: flex;
@@ -28,37 +32,46 @@ const StyledCalendar = styled.div`
   }
 `;
 
-const Calendar: React.FC = () => {
-  // get an array YYYYMM starting from today to 10 months later
-  // const initialPages = Array.from(Array(10).keys()).map((_, index) => {
-  //   const today = new Date();
-  //   const year = today.getFullYear();
-  //   const month = today.getMonth() + index;
-  //   return { id: `${year}${month}`, year, month };
-  // });
-
-  // get an array YYYYMM past 10 months and future 10 months from today
+const Calendar: React.FC<Props> = ({ initialDate, reload }) => {
+  // get an array YYYYMM past 10 months and future 10 months from initialDate
   const initialPages = Array.from(Array(20).keys()).map((_, index) => {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = today.getMonth() + index - 10;
+    const year = initialDate.getFullYear();
+    const month = initialDate.getMonth() + index - 10;
     return { id: `${year}${month}`, year, month };
   });
 
   // flip to today's page when the diary is loaded
-  // const [currentPage, setCurrentPage] = useState(initialPages[10]);
   const [pages, setPages] = useState(initialPages);
   const diary = useRef(null);
 
   const initDiary = () => {
-    // repeat 10 times flipping to next page with 1 second interval
-    // for (let i = 0; i < 5; i++) {
-    //   setTimeout(() => {
-    //     (diary as any).current.pageFlip().flipNext();
-    //   }, 800 * i);
-    // }
-
     (diary as any).current.pageFlip().flip(10);
+  };
+
+  const flipPrev = () => {
+    const diaryPage = (diary as any).current.pageFlip();
+
+    // reload when the first page is reached
+    if (diaryPage.getCurrentPageIndex() === 0) {
+      reload(new Date(pages[0].year, pages[0].month, 1));
+      return;
+    }
+
+    diaryPage.flipPrev();
+  };
+
+  const flipNext = () => {
+    const diaryPage = (diary as any).current.pageFlip();
+
+    // reload when the last page is reached
+    if (diaryPage.getCurrentPageIndex() === pages.length - 2) {
+      reload(
+        new Date(pages[pages.length - 1].year, pages[pages.length - 1].month, 1)
+      );
+      return;
+    }
+
+    diaryPage.flipNext();
   };
 
   return (
@@ -78,20 +91,10 @@ const Calendar: React.FC = () => {
           <CalendarPage key={page.id} year={page.year} month={page.month} />
         ))}
       </HTMLFlipBook>
-      <button
-        className="btn prev"
-        onClick={() => {
-          (diary as any).current.pageFlip().flipPrev();
-        }}
-      >
+      <button className="btn prev" onClick={flipPrev}>
         Prev
       </button>
-      <button
-        className="btn next"
-        onClick={() => {
-          (diary as any).current.pageFlip().flipNext();
-        }}
-      >
+      <button className="btn next" onClick={flipNext}>
         Next
       </button>
     </StyledCalendar>
