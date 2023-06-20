@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { useAppDispatch } from "../../store/config";
 import {
   activateElement,
@@ -8,7 +8,7 @@ import {
   setElementPositionAndSize
 } from "../../store/slices/pageSlice";
 import { Element } from "../Designs/Element/element";
-import Popover from "./Popover";
+// import Popover from "./Popover";
 import Resizer from "./Resizer";
 import { Direction } from "./Resizer/constants";
 
@@ -28,6 +28,37 @@ const StyledPanel = styled.div`
   }
 `;
 
+interface MenuProps {
+  top: number;
+  left: number;
+}
+
+const StyledContextMenu = styled.div<MenuProps>`
+  position: fixed;
+  width: 200px;
+  background-color: #383838;
+  border-radius: 5px;
+  box-sizing: border-box;
+  ${({ top, left }) => css`
+    top: ${top}px;
+    left: ${left}px;
+  `}
+  ul {
+    box-sizing: border-box;
+    padding: 10px;
+    margin: 0;
+    list-style: none;
+  }
+  ul li {
+    padding: 18px 12px;
+  }
+  /* hover */
+  ul li:hover {
+    cursor: pointer;
+    background-color: #000000;
+  }
+`;
+
 interface Props {
   children: React.ReactNode;
   element: Element;
@@ -38,7 +69,15 @@ const Panel: React.FC<Props> = ({ element, children }) => {
   const [mouseDown, setMouseDown] = useState(false);
   const dispatch = useAppDispatch();
 
+  const parentRef = useRef(null);
+
   const { isActivated } = element.metadata;
+
+  const [clicked, setClicked] = useState(false);
+  const [points, setPoints] = useState({
+    x: 0,
+    y: 0
+  });
 
   const dynamicPanelStyle = {
     top: `${element.y}px`,
@@ -134,14 +173,19 @@ const Panel: React.FC<Props> = ({ element, children }) => {
   };
 
   useEffect(() => {
+    const handleClick = () => {
+      setClicked(false);
+    };
     const handleMouseUp = (): void => {
       setMouseDown(false);
     };
 
+    window.addEventListener("click", handleClick);
     window.addEventListener("mouseup", handleMouseUp);
 
     return () => {
       window.addEventListener("mouseup", handleMouseUp);
+      window.removeEventListener("click", handleClick);
     };
   }, []);
 
@@ -170,30 +214,70 @@ const Panel: React.FC<Props> = ({ element, children }) => {
   };
 
   return (
-    <StyledPanel className="panel" ref={panelRef} style={dynamicPanelStyle}>
-      <div className="panel_container">
-        {isActivated ? (
-          <>
-            <Resizer onResize={handleResize} />
+    <>
+      <StyledPanel
+        className="panel"
+        ref={panelRef}
+        style={dynamicPanelStyle}
+        onContextMenu={(e) => {
+          e.preventDefault();
 
-            <div className="panel_content" onMouseDown={handleMouseDown}>
-              {children}
-            </div>
+          const parentElement = parentRef.current;
+          /* @ts-expect-error: 라이브러리 타입 정의 오류 */
+          const parentRect = parentElement.getBoundingClientRect();
 
-            {/* Resize Observer 오류 발생
+          // const mouseX = e.clientX - parentRect.left;
+          // const mouseY = e.clientY - parentRect.top;
+
+          // console.log("Relative mouse position:", mouseX, mouseY);
+
+          setClicked(true);
+          setPoints({
+            x: e.pageX,
+            y: e.pageY
+          });
+          console.log("Right Click", e.pageX, e.pageY);
+          console.log("Right Click", e.clientX, e.clientY);
+          console.log("Parent Element", parentRect.left, parentRect.top);
+        }}
+      >
+        <div className="panel_container" ref={parentRef}>
+          {isActivated ? (
+            <>
+              <Resizer onResize={handleResize} />
+
+              <div className="panel_content" onMouseDown={handleMouseDown}>
+                {children}
+              </div>
+
+              {/* Resize Observer 오류 발생
             <Popover>
               <div className="panel_content" onMouseDown={handleMouseDown}>
                 {children}
               </div>
             </Popover> */}
-          </>
-        ) : (
-          <div className="panel_content" onMouseDown={handleMouseDown}>
-            {children}
-          </div>
-        )}
-      </div>
-    </StyledPanel>
+            </>
+          ) : (
+            <div className="panel_content" onMouseDown={handleMouseDown}>
+              {children}
+            </div>
+          )}
+
+          {clicked && (
+            <StyledContextMenu
+              top={points.y - element.y}
+              left={points.x - element.x}
+            >
+              <ul>
+                <li>Edit</li>
+                <li>Copy</li>
+                <li>Delete</li>
+              </ul>
+            </StyledContextMenu>
+          )}
+        </div>
+      </StyledPanel>
+    </>
   );
 };
 
