@@ -8,9 +8,20 @@ import {
   setElementPositionAndSize
 } from "../../store/slices/pageSlice";
 import { Element } from "../Designs/Element/element";
-import Popover from "./Popover";
 import Resizer from "./Resizer";
 import { Direction } from "./Resizer/constants";
+import Modal from "react-modal";
+
+const customStyles = {
+  content: {
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    marginRight: "-50%",
+    transform: "translate(-50%, -50%)"
+  }
+};
 
 const StyledPanel = styled.div`
   position: absolute;
@@ -32,6 +43,8 @@ interface Props {
   children: React.ReactNode;
   element: Element;
 }
+
+Modal.setAppElement(document.getElementById("app-root") as HTMLElement);
 
 const Panel: React.FC<Props> = ({ element, children }) => {
   const panelRef = useRef<null | HTMLDivElement>(null);
@@ -169,6 +182,21 @@ const Panel: React.FC<Props> = ({ element, children }) => {
     }
   };
 
+  const [modalIsOpen, setIsOpen] = React.useState(false);
+
+  function openModal() {
+    setIsOpen(true);
+  }
+
+  // function afterOpenModal() {
+  //   // references are now sync'd and can be accessed.
+  //   subtitle.style.color = "#f00";
+  // }
+
+  function closeModal() {
+    setIsOpen(false);
+  }
+
   return (
     <StyledPanel className="panel" ref={panelRef} style={dynamicPanelStyle}>
       <div className="panel_container">
@@ -180,12 +208,16 @@ const Panel: React.FC<Props> = ({ element, children }) => {
               {children}
             </div>
 
-            {/* Resize Observer 오류 발생
-            <Popover>
-              <div className="panel_content" onMouseDown={handleMouseDown}>
-                {children}
-              </div>
-            </Popover> */}
+            <button
+              onClick={openModal}
+              style={{
+                position: "absolute",
+                bottom: "-30px",
+                left: 0
+              }}
+            >
+              추출
+            </button>
           </>
         ) : (
           <div className="panel_content" onMouseDown={handleMouseDown}>
@@ -193,6 +225,21 @@ const Panel: React.FC<Props> = ({ element, children }) => {
           </div>
         )}
       </div>
+
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        style={customStyles}
+        contentLabel="Example Modal"
+      >
+        <button onClick={closeModal}>close</button>
+        <div>추출하고자 하는 대상을 선택해주세요</div>
+        <button>사람</button>
+        <button>동물</button>
+        <button>음식</button>
+        <button>자연물</button>
+        <button>기타 사물</button>
+      </Modal>
     </StyledPanel>
   );
 };
