@@ -87,8 +87,13 @@ const Calendar: React.FC<Props> = ({ initialDate, reload }) => {
         onInit={initDiary}
         ref={diary}
       >
-        {pages.map((page) => (
-          <CalendarPage key={page.id} year={page.year} month={page.month} />
+        {pages.map((page, index) => (
+          <CalendarPage
+            key={page.id}
+            year={page.year}
+            month={page.month}
+            isLeftPage={index % 2 === 0}
+          />
         ))}
       </HTMLFlipBook>
       <button className="btn prev" onClick={flipPrev}>

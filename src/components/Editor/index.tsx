@@ -46,10 +46,11 @@ const Editor: React.FC = () => {
         useMouseEvents={false}
         ref={diary}
       >
-        {pages.map((page) => (
+        {pages.map((page, index) => (
           <DiaryPage
             key={page.id}
             page={editingPage.id === page.id ? editingPage : page}
+            isLeftPage={index % 2 === 0}
           />
         ))}
       </HTMLFlipBook>
