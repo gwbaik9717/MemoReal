@@ -27,6 +27,9 @@ const StyledDiaryContainer = styled.div`
   justify-content: center;
   align-items: center;
   height: 100vh;
+  background-image: url("https://static.waveon.io/img/apps/18146/backgroundTexture.png");
+  background-size: cover;
+  background-repeat: no-repeat;
 `;
 
 const App: React.FC = () => {

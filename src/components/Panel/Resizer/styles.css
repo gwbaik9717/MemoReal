@@ -2,7 +2,7 @@
   background-color: magenta;
 }
 
-.top-left {
+.handler.top-left {
   position: absolute;
   cursor: nwse-resize;
   height: 10px;
@@ -11,7 +11,7 @@
   left: 0;
   top: 0;
 }
-.top {
+.handler.top {
   position: absolute;
   cursor: ns-resize;
   height: 4px;
@@ -20,7 +20,7 @@
   left: 0;
   top: 0;
 }
-.top-right {
+.handler.top-right {
   position: absolute;
   cursor: nesw-resize;
   height: 10px;
@@ -29,7 +29,7 @@
   right: 0;
   top: 0;
 }
-.right {
+.handler.right {
   position: absolute;
   cursor: ew-resize;
   width: 4px;
@@ -38,7 +38,7 @@
   right: 0;
   top: 0;
 }
-.bottom-left {
+.handler.bottom-left {
   position: absolute;
   cursor: nesw-resize;
   width: 10px;
@@ -47,7 +47,7 @@
   left: 0;
   bottom: 0;
 }
-.bottom {
+.handler.bottom {
   position: absolute;
   cursor: ns-resize;
   width: 100%;
@@ -56,7 +56,7 @@
   bottom: 0;
   left: 0;
 }
-.right-bottom {
+.handler.right-bottom {
   position: absolute;
   cursor: nwse-resize;
   width: 10px;
@@ -65,7 +65,7 @@
   right: 0;
   bottom: 0;
 }
-.left {
+.handler.left {
   position: absolute;
   cursor: ew-resize;
   width: 4px;

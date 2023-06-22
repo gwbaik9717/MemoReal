@@ -71,7 +71,16 @@ const StyledLoginPage = styled.div`
   }
 `;
 
-const LoginPage = forwardRef(function Page(_, ref: any) {
+interface Props {
+  login: () => void;
+}
+
+const LoginPage = forwardRef(function Page({ login }: Props, ref: any) {
+  const onClickLogin = (e: any) => {
+    e.preventDefault();
+    login();
+  };
+
   return (
     <StyledLoginPage className="diary_page" ref={ref}>
       <div className="login_container">
@@ -103,7 +112,12 @@ const LoginPage = forwardRef(function Page(_, ref: any) {
               <button type="submit" className="button" id="loginBtn">
                 로그인
               </button>
-              <button type="submit" className="button" id="signupBtn">
+              <button
+                type="submit"
+                className="button"
+                id="signupBtn"
+                onClick={onClickLogin}
+              >
                 가입하기
               </button>
             </div>

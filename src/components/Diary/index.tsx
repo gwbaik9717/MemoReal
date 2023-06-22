@@ -30,13 +30,13 @@ const Diary: React.FC = () => {
 
   return (
     <>
-      <button
+      {/* <button
         onClick={() => {
           dispatch(setDiaryMode(DiaryMode.viewer));
         }}
       >
         change mode
-      </button>
+      </button> */}
 
       <StyledDiary className="diary">
         {mode === DiaryMode.calendar ? (

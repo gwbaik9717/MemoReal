@@ -1,7 +1,10 @@
 import React, { forwardRef, useState } from "react";
 import styled, { css } from "styled-components";
 import Calendar from "react-calendar";
-
+import CalendarTile from "./tile";
+import { DiaryMode, setDiaryMode } from "../../store/slices/diarySlice";
+import { useAppDispatch } from "../../store/config";
+// import "react-calendar/dist/Calendar.css";
 interface Props {
   year: number;
   month: number;
@@ -13,12 +16,13 @@ interface StyledProps {
 }
 
 const StyledDiaryPage = styled.div<StyledProps>`
-  width: 100%;
-  height: 100%;
+  @import url("https://fonts.googleapis.com/css2?family=Amatic+SC&display=swap");
+  @import url("https://fonts.googleapis.com/css2?family=Baloo+2&display=swap");
+
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgb(53, 53, 53);
+  padding: 41px 22px 49px 49px;
 
   ${({ isLeftPage }) =>
     isLeftPage
@@ -53,6 +57,54 @@ const StyledDiaryPage = styled.div<StyledProps>`
 
           border-radius: 0.5% 0% 0% 0.5%;
         `}
+
+  .top {
+    text-align: center;
+    margin-bottom: 56px;
+    font-family: "Amatic SC", cursive;
+  }
+
+  .top .subtitle {
+    font-weight: 700;
+    font-size: 30px;
+    line-height: 38px;
+  }
+
+  .top .title {
+    font-weight: 400;
+    font-size: 60px;
+    line-height: 76px;
+  }
+
+  .react_calendar {
+    width: 100% !important;
+  }
+
+  .react-calendar__month-view__weekdays__weekday {
+    color: blue;
+    height: 43px;
+    text-align: center;
+  }
+
+  .react-calendar__month-view__weekdays__weekday.react-calendar__month-view__weekdays__weekday--weekend {
+    color: green;
+  }
+
+  .react-calendar__tile {
+    font-family: "Baloo 2", cursive;
+    text-align: left;
+    font-size: 16px;
+    line-height: 26px;
+    height: 32px;
+    margin-bottom: 53px;
+    position: relative;
+    padding: 0 0 3px 3px;
+  }
+
+  .react-calendar__tile abbr {
+    z-index: 1;
+    position: relative;
+  }
 `;
 
 const CalendarPage = forwardRef(function Page(
@@ -60,13 +112,32 @@ const CalendarPage = forwardRef(function Page(
   ref: any
 ) {
   const [calendarDate, setCalendarDate] = useState(new Date(year, month));
+  const dispatch = useAppDispatch();
+
+  const onClickDay = (value: Date, event: any) => {
+    dispatch(setDiaryMode(DiaryMode.editor));
+  };
 
   return (
     <StyledDiaryPage className="diary_page" ref={ref} isLeftPage={isLeftPage}>
-      <p>
-        {year}년 {month + 1}월
-      </p>
-      <Calendar value={calendarDate} showNavigation={false} view={"month"} />
+      <div className="top">
+        <div className="subtitle">{month + 1}</div>
+        <div className="title">
+          {new Date(year, month).toLocaleString("en-US", {
+            month: "long"
+          })}
+        </div>
+      </div>
+      <Calendar
+        value={calendarDate}
+        showNavigation={false}
+        tileContent={CalendarTile}
+        view={"month"}
+        calendarType="US"
+        formatDay={(locale, date) => date.getDate().toString()}
+        showNeighboringMonth={false}
+        onClickDay={onClickDay}
+      />
     </StyledDiaryPage>
   );
 });
