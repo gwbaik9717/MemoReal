@@ -39,8 +39,8 @@ const Editor: React.FC = () => {
       {/* @ts-expect-error: 라이브러리 타입 정의 오류 */}
       <HTMLFlipBook
         className="diary"
-        width={550}
-        height={733}
+        width={547}
+        height={790}
         maxShadowOpacity={0.5}
         usePortrait={false}
         useMouseEvents={false}

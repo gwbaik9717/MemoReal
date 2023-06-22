@@ -5,6 +5,21 @@ import Diary from "./components/Diary";
 
 const GlobalStyle = createGlobalStyle`
   ${reset}
+  * {
+    box-sizing: border-box;
+  }
+
+  button, input{
+    border: none;
+    outline: none;
+    background: none;
+    padding: 0;
+  }
+
+  textarea:focus,
+  input:focus {
+    outline: none;
+  }
 `;
 
 const StyledDiaryContainer = styled.div`

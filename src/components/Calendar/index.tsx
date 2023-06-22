@@ -2,6 +2,8 @@ import React, { useRef, useState } from "react";
 import styled from "styled-components";
 import HTMLFlipBook from "react-pageflip";
 import CalendarPage from "./page";
+import LoginPage from "../Cover/login";
+import CoverPage from "../Cover/cover";
 
 interface Props {
   reload: (initialDate: Date) => void;
@@ -79,14 +81,15 @@ const Calendar: React.FC<Props> = ({ initialDate, reload }) => {
       {/* @ts-expect-error: 라이브러리 타입 정의 오류 */}
       <HTMLFlipBook
         className="diary"
-        width={550}
-        height={733}
+        width={547}
+        height={790}
         maxShadowOpacity={0.5}
         usePortrait={false}
         useMouseEvents={false}
-        onInit={initDiary}
         ref={diary}
       >
+        <LoginPage />
+        <CoverPage />
         {pages.map((page, index) => (
           <CalendarPage
             key={page.id}
