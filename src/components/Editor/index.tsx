@@ -6,25 +6,30 @@ import HTMLFlipBook from "react-pageflip";
 import { useAppSelector } from "../../store/config";
 
 const StyledEditor = styled.div`
-  display: flex;
+  .diary_wrapper {
+    display: flex;
+  }
 
-  .diary {
+  .diary_wrapper .diary {
     order: 1;
   }
 
-  .diary_sidebar {
-    order: 3;
+  .diary_wrapper .wing {
+    width: 60px;
+    height: 790px;
   }
 
-  .btn {
-    background-color: yellow;
+  .diary_wrapper .wing img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
   }
 
-  .btn.prev {
+  .diary_wrapper .wing.left {
     order: 0;
   }
 
-  .btn.next {
+  .diary_wrapper .wing.right {
     order: 2;
   }
 `;
@@ -35,42 +40,58 @@ const Editor: React.FC = () => {
   const diary = useRef(null);
 
   return (
-    <StyledEditor>
-      {/* @ts-expect-error: 라이브러리 타입 정의 오류 */}
-      <HTMLFlipBook
-        className="diary"
-        width={547}
-        height={790}
-        maxShadowOpacity={0.5}
-        usePortrait={false}
-        useMouseEvents={false}
-        ref={diary}
-      >
-        {pages.map((page, index) => (
-          <DiaryPage
-            key={page.id}
-            page={editingPage.id === page.id ? editingPage : page}
-            isLeftPage={index % 2 === 0}
+    <StyledEditor className="diary_container">
+      <div className="diary_wrapper">
+        {/* @ts-expect-error: 라이브러리 타입 정의 오류 */}
+        <HTMLFlipBook
+          className="diary"
+          width={547}
+          height={790}
+          maxShadowOpacity={0.5}
+          usePortrait={false}
+          useMouseEvents={false}
+          ref={diary}
+        >
+          {pages.map((page, index) => (
+            <DiaryPage
+              key={page.id}
+              page={editingPage.id === page.id ? editingPage : page}
+              isLeftPage={index % 2 === 0}
+            />
+          ))}
+        </HTMLFlipBook>
+        <button
+          className="btn prev"
+          onClick={() => {
+            (diary as any).current.pageFlip().flipPrev();
+          }}
+        >
+          Prev
+        </button>
+        <button
+          className="btn next"
+          onClick={() => {
+            (diary as any).current.pageFlip().flipNext();
+          }}
+        >
+          Next
+        </button>
+
+        {/* <div className="wing left">
+          <img
+            src="https://static.waveon.io/img/apps/18146/cover_left.png"
+            alt="left_wing"
           />
-        ))}
-      </HTMLFlipBook>
-      <button
-        className="btn prev"
-        onClick={() => {
-          (diary as any).current.pageFlip().flipPrev();
-        }}
-      >
-        Prev
-      </button>
-      <button
-        className="btn next"
-        onClick={() => {
-          (diary as any).current.pageFlip().flipNext();
-        }}
-      >
-        Next
-      </button>
-      <Sidebar />
+        </div>
+        <div className="wing right">
+          <img
+            src="https://static.waveon.io/img/apps/18146/cover_right_1687413440131.png"
+            alt="left_wing"
+          />
+        </div> */}
+
+        <Sidebar />
+      </div>
     </StyledEditor>
   );
 };

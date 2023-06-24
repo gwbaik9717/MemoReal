@@ -11,8 +11,6 @@ interface Props {
 }
 
 const StyledCalendar = styled.div`
-  /* display: flex; */
-
   .diary_wrapper {
     display: flex;
   }

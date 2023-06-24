@@ -5,6 +5,10 @@ import Calendar from "../Calendar";
 import { useAppDispatch, useAppSelector } from "../../store/config";
 import { DiaryMode, setDiaryMode } from "../../store/slices/diarySlice";
 
+interface Props {
+  mode: DiaryMode;
+}
+
 const StyledDiary = styled.div`
   display: flex;
   justify-content: center;
@@ -12,9 +16,9 @@ const StyledDiary = styled.div`
   height: 100vh;
 `;
 
-const Diary: React.FC = () => {
-  const dispatch = useAppDispatch();
-  const { mode } = useAppSelector((state) => state.diary);
+const Diary: React.FC<Props> = ({ mode }) => {
+  //const dispatch = useAppDispatch();
+  // const { mode } = useAppSelector((state) => state.diary);
 
   // key for rerendering HTMLFlipBook
   const [key, setKey] = useState(0);
