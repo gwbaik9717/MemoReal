@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import Diary from "../components/Diary";
-import { DiaryMode } from "../store/slices/diarySlice";
+import { DiaryMode, setDiaryMode } from "../store/slices/diarySlice";
 
 const StyledDiaryContainer = styled.div`
   display: flex;
@@ -14,6 +15,11 @@ const StyledDiaryContainer = styled.div`
 `;
 
 const EditPage = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(setDiaryMode(DiaryMode.viewer));
+  }, []);
   return (
     <StyledDiaryContainer className="diary_container">
       <Diary mode={DiaryMode.editor} />

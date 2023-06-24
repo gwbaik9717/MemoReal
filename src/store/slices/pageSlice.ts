@@ -5,6 +5,7 @@ import { generateId } from "../../utils/idUtils";
 export class Page {
   id: string;
   elements: Element[] = [];
+  isLeftPage: boolean = false;
 
   constructor() {
     this.id = generateId();
@@ -37,6 +38,12 @@ export const pageSlice = createSlice({
   name: "page",
   initialState,
   reducers: {
+    setElementIsLeftPage(state, action: PayloadAction<boolean>) {
+      return {
+        ...state,
+        isLeftPage: action.payload
+      };
+    },
     setEditingPage(state, action: PayloadAction<Page>) {
       return {
         ...action.payload
@@ -134,6 +141,7 @@ export const pageSlice = createSlice({
 });
 
 export const {
+  setElementIsLeftPage,
   setEditingPage,
   addElement,
   removeElement,

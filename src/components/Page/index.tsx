@@ -1,23 +1,14 @@
 import React, { forwardRef } from "react";
 import styled, { css } from "styled-components";
-import { useAppDispatch, useAppSelector } from "../../store/config";
 import type { ImageElement as ImageElementType } from "../Designs/ImageElement/imageElement";
 import { ElementType } from "../Designs/Element/element";
 import ImageElement from "../Designs/ImageElement";
-import {
-  deactivateAllElements,
-  Page,
-  setEditingPage
-} from "../../store/slices/pageSlice";
-import {
-  DiaryMode,
-  setDiaryMode,
-  updatePage
-} from "../../store/slices/diarySlice";
+import { Page } from "../../store/slices/pageSlice";
 
 interface Props {
   page: Page;
   isLeftPage: boolean;
+  diary: any;
 }
 
 interface StyledProps {
@@ -25,11 +16,6 @@ interface StyledProps {
 }
 
 const StyledDiaryPage = styled.div<StyledProps>`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: rgb(53, 53, 53);
-
   ${({ isLeftPage }) =>
     isLeftPage
       ? css`
@@ -63,16 +49,33 @@ const StyledDiaryPage = styled.div<StyledProps>`
 
           border-radius: 0.5% 0% 0% 0.5%;
         `}
+
+  .navigation {
+    width: 74px;
+    height: 70px;
+    position: absolute;
+    bottom: 0;
+    ${({ isLeftPage }) =>
+      isLeftPage
+        ? css`
+            left: 0;
+          `
+        : css`
+            right: 0;
+          `}
+  }
+
+  .navigation > img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
 `;
 
 const DiaryPage = forwardRef(function Page(
-  { page, isLeftPage }: Props,
+  { page, isLeftPage, diary }: Props,
   ref: any
 ) {
-  const { mode } = useAppSelector((state) => state.diary);
-
-  const dispatch = useAppDispatch();
-
   const { elements } = page;
 
   const imageElements = elements.filter(
@@ -84,33 +87,44 @@ const DiaryPage = forwardRef(function Page(
     // dispatch(deactivateAllElements());
   };
 
-  const toggleDiaryMode = () => {
-    if (mode === DiaryMode.viewer) {
-      // 현재 page의 스크린샷 뜨기
-      dispatch(setEditingPage(page));
-      dispatch(setDiaryMode(DiaryMode.editor));
-    } else {
-      // Diary store의 Page 와 동기화
-      dispatch(updatePage(page));
-      dispatch(setDiaryMode(DiaryMode.viewer));
-    }
-  };
-
   return (
     <StyledDiaryPage
       className="diary_page"
-      data-density="hard"
       isLeftPage={isLeftPage}
+      data-density="hard"
       onClick={handleClick}
       ref={ref}
     >
-      <p>{page.id}</p>
-      <button onClick={toggleDiaryMode}>
-        {mode === DiaryMode.editor ? "View" : "Edit"}
-      </button>
+      {/* <p>{page.id}</p> */}
       {imageElements.map((element) => (
         <ImageElement key={element.id} element={element} />
       ))}
+
+      {isLeftPage ? (
+        <div
+          className="navigation"
+          onClick={() => {
+            diary.current.pageFlip().flipPrev();
+          }}
+        >
+          <img
+            src="https://static.waveon.io/img/apps/18146/left_prev_btn.png"
+            alt="navgation_prev"
+          />
+        </div>
+      ) : (
+        <div
+          className="navigation"
+          onClick={() => {
+            diary.current.pageFlip().flipNext();
+          }}
+        >
+          <img
+            src="https://static.waveon.io/img/apps/18146/right_next_btn.png"
+            alt="navgation_prev"
+          />
+        </div>
+      )}
     </StyledDiaryPage>
   );
 });

@@ -15,10 +15,10 @@ export interface Diary {
 const initialState: Diary = {
   mode: DiaryMode.calendar,
   pages: [
-    { id: "1", elements: [] },
-    { id: "2", elements: [] },
-    { id: "3", elements: [] },
-    { id: "4", elements: [] }
+    { id: "1", elements: [], isLeftPage: false },
+    { id: "2", elements: [], isLeftPage: false },
+    { id: "3", elements: [], isLeftPage: false },
+    { id: "4", elements: [], isLeftPage: false }
   ]
 };
 
