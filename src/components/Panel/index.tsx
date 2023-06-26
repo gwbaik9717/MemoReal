@@ -34,6 +34,23 @@ const StyledPanel = styled.div`
     height: 100%;
   }
 
+  .size-indicator {
+    position: absolute;
+    bottom: -21px;
+    left: 50%;
+    transform: translate(-50%, 0);
+    min-width: 52px;
+    text-align: center;
+    padding: 2px 4px;
+    background: #5a46d5;
+    border-radius: 3px;
+    color: #fff;
+    font-size: 9px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
   .panel_content {
     width: 100%;
     height: 100%;
@@ -254,6 +271,12 @@ const Panel: React.FC<Props> = ({ element, children }) => {
 
             <div className="panel_content" onMouseDown={handleMouseDown}>
               {children}
+            </div>
+
+            <div className="size-indicator">
+              <span>
+                {element.width} × {element.height}
+              </span>
             </div>
 
             <button
