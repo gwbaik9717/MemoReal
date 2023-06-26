@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { useAppDispatch } from "../../store/config";
 import {
   activateElement,
@@ -24,6 +24,31 @@ const customStyles = {
     transform: "translate(-50%, -50%)"
   }
 };
+
+const StyledContextMenu = styled.div<StyledProps>`
+  position: absolute;
+  width: 116px;
+  background: #313131;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+  color: #fff;
+  border-radius: 4px;
+  z-index: 5;
+  text-align: center;
+
+  ${({ top, left }) => css`
+    top: ${top}px;
+    left: ${left}px;
+  `}
+  ul {
+    box-sizing: border-box;
+    padding: 11px;
+    margin: 0;
+    list-style: none;
+  }
+  ul li {
+    cursor: pointer;
+  }
+`;
 
 const StyledPanel = styled.div`
   position: absolute;
@@ -68,12 +93,20 @@ interface Props {
   children: React.ReactNode;
   element: Element;
 }
-
+interface StyledProps {
+  top: number;
+  left: number;
+}
 Modal.setAppElement(document.getElementById("app-root") as HTMLElement);
 
 const Panel: React.FC<Props> = ({ element, children }) => {
   const panelRef = useRef<null | HTMLDivElement>(null);
   const [mouseDown, setMouseDown] = useState(false);
+  const [rightClicked, setRightClicked] = useState(false);
+  const [points, setPoints] = useState({
+    x: 0,
+    y: 0
+  });
   const dispatch = useAppDispatch();
 
   const { isActivated } = element.metadata;
@@ -172,14 +205,19 @@ const Panel: React.FC<Props> = ({ element, children }) => {
   };
 
   useEffect(() => {
+    const handleClick = () => {
+      setRightClicked(false);
+    };
     const handleMouseUp = (): void => {
       setMouseDown(false);
     };
 
+    window.addEventListener("click", handleClick);
     window.addEventListener("mouseup", handleMouseUp);
 
     return () => {
       window.addEventListener("mouseup", handleMouseUp);
+      window.removeEventListener("click", handleClick);
     };
   }, []);
 
@@ -199,6 +237,7 @@ const Panel: React.FC<Props> = ({ element, children }) => {
 
   const handleMouseDown = (e: any): void => {
     setMouseDown(true);
+    setRightClicked(false);
     e.stopPropagation();
 
     if (!isActivated) {
@@ -270,6 +309,17 @@ const Panel: React.FC<Props> = ({ element, children }) => {
       onClick={(e) => {
         e.stopPropagation();
       }}
+      onContextMenu={(e) => {
+        e.preventDefault();
+
+        const panelPosition = (panelRef as any).current.getBoundingClientRect();
+
+        setRightClicked(true);
+        setPoints({
+          x: e.pageX - panelPosition.left,
+          y: e.pageY - panelPosition.top
+        });
+      }}
     >
       <div className="panel_container">
         {isActivated ? (
@@ -286,16 +336,13 @@ const Panel: React.FC<Props> = ({ element, children }) => {
               </span>
             </div>
 
-            <button
-              onClick={openModal}
-              style={{
-                position: "absolute",
-                bottom: "-30px",
-                left: 0
-              }}
-            >
-              추출
-            </button>
+            {rightClicked && (
+              <StyledContextMenu top={points.y} left={points.x}>
+                <ul>
+                  <li onClick={openModal}>추출</li>
+                </ul>
+              </StyledContextMenu>
+            )}
           </>
         ) : (
           <div className="panel_content" onMouseDown={handleMouseDown}>
