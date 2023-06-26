@@ -3,7 +3,8 @@ import styled, { css } from "styled-components";
 import type { ImageElement as ImageElementType } from "../Designs/ImageElement/imageElement";
 import { ElementType } from "../Designs/Element/element";
 import ImageElement from "../Designs/ImageElement";
-import { Page } from "../../store/slices/pageSlice";
+import { deactivateAllElements, Page } from "../../store/slices/pageSlice";
+import { useAppDispatch } from "../../store/config";
 
 interface Props {
   page: Page;
@@ -77,14 +78,14 @@ const DiaryPage = forwardRef(function Page(
   ref: any
 ) {
   const { elements } = page;
+  const dispatch = useAppDispatch();
 
   const imageElements = elements.filter(
     (element) => element.type === ElementType.image
   ) as ImageElementType[];
 
   const handleClick = () => {
-    // console.log("deactivateAll");
-    // dispatch(deactivateAllElements());
+    dispatch(deactivateAllElements());
   };
 
   return (

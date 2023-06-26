@@ -263,7 +263,14 @@ const Panel: React.FC<Props> = ({ element, children }) => {
   };
 
   return (
-    <StyledPanel className="panel" ref={panelRef} style={dynamicPanelStyle}>
+    <StyledPanel
+      className="panel"
+      ref={panelRef}
+      style={dynamicPanelStyle}
+      onClick={(e) => {
+        e.stopPropagation();
+      }}
+    >
       <div className="panel_container">
         {isActivated ? (
           <>

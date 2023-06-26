@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { ElementMetadata } from "../../components/Designs/Element/element";
 import { Page } from "./pageSlice";
 
 export enum DiaryMode {
@@ -36,7 +37,16 @@ export const diarySlice = createSlice({
       return {
         ...state,
         pages: state.pages.map((page) =>
-          page.id === action.payload.id ? action.payload : page
+          page.id === action.payload.id
+            ? // 페이지 내 모든 엘리먼트 metadata 초기화
+              {
+                ...action.payload,
+                elements: action.payload.elements.map((element) => ({
+                  ...element,
+                  metadata: new ElementMetadata()
+                }))
+              }
+            : page
         )
       };
     },
