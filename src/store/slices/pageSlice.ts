@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Element } from "../../components/Designs/Element/element";
+import { ImageElement } from "../../components/Designs/ImageElement/imageElement";
 import { generateId } from "../../utils/idUtils";
 
 export class Page {
@@ -53,6 +54,19 @@ export const pageSlice = createSlice({
       return {
         ...state,
         elements: state.elements.concat(action.payload)
+      };
+    },
+    editElement(state, action: PayloadAction<ImageElement>) {
+      return {
+        ...state,
+        elements: state.elements.map((element) =>
+          element.id === action.payload.id
+            ? {
+                ...element,
+                ...action.payload
+              }
+            : element
+        )
       };
     },
     removeElement(state, action: PayloadAction<string>) {
@@ -149,7 +163,8 @@ export const {
   resizeElement,
   setElementPositionAndSize,
   activateElement,
-  deactivateAllElements
+  deactivateAllElements,
+  editElement
 } = pageSlice.actions;
 
 export default pageSlice;

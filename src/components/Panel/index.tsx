@@ -4,6 +4,7 @@ import { useAppDispatch } from "../../store/config";
 import {
   activateElement,
   deactivateAllElements,
+  editElement,
   moveElement,
   setElementPositionAndSize
 } from "../../store/slices/pageSlice";
@@ -11,6 +12,7 @@ import { Element } from "../Designs/Element/element";
 import Resizer from "./Resizer";
 import { Direction } from "./Resizer/constants";
 import Modal from "react-modal";
+import { ImageElement } from "../Designs/ImageElement/imageElement";
 
 const customStyles = {
   content: {
@@ -39,6 +41,13 @@ const StyledPanel = styled.div`
   }
 `;
 
+enum Category {
+  person = "person",
+  thing = "thing",
+  animal = "animal",
+  food = "food",
+  vehicle = "vehicle"
+}
 interface Props {
   children: React.ReactNode;
   element: Element;
@@ -197,6 +206,46 @@ const Panel: React.FC<Props> = ({ element, children }) => {
     setIsOpen(false);
   }
 
+  const extractObjectByCategory = async (category: Category) => {
+    const localUrl = (element as ImageElement).src;
+
+    fetch(localUrl)
+      .then((response) => response.blob())
+      .then((blobData) => {
+        const formData = new FormData();
+        formData.set("image", blobData, "image.jpg");
+
+        const requestOptions = {
+          method: "POST",
+          body: formData
+        };
+
+        // Send the FormData object as a POST request to the API server
+        fetch(`http://3.37.174.220:3000/images/ai/${category}`, requestOptions)
+          .then((response: any) => {
+            return response.json(); // Parse the response as JSON
+          })
+          .then((data: any) => {
+            dispatch(
+              editElement({
+                ...element,
+                src: data.imageUrl
+              })
+            );
+
+            closeModal();
+          })
+          .catch((error) => {
+            // Handle any errors that occur during the request
+            console.error("Error:", error);
+          });
+      })
+      .catch((error) => {
+        // Handle any errors
+        console.error("Error:", error);
+      });
+  };
+
   return (
     <StyledPanel className="panel" ref={panelRef} style={dynamicPanelStyle}>
       <div className="panel_container">
@@ -234,11 +283,42 @@ const Panel: React.FC<Props> = ({ element, children }) => {
       >
         <button onClick={closeModal}>close</button>
         <div>추출하고자 하는 대상을 선택해주세요</div>
-        <button>사람</button>
-        <button>동물</button>
+        <button
+          onClick={async () => {
+            await extractObjectByCategory(Category.person);
+          }}
+        >
+          사람
+        </button>
+        <button
+          onClick={async () => {
+            await extractObjectByCategory(Category.animal);
+          }}
+        >
+          동물
+        </button>
         <button>음식</button>
-        <button>자연물</button>
-        <button>기타 사물</button>
+        <button
+          onClick={async () => {
+            await extractObjectByCategory(Category.vehicle);
+          }}
+        >
+          탈 것
+        </button>
+        <button
+          onClick={async () => {
+            await extractObjectByCategory(Category.food);
+          }}
+        >
+          음식
+        </button>
+        <button
+          onClick={async () => {
+            await extractObjectByCategory(Category.thing);
+          }}
+        >
+          사물
+        </button>
       </Modal>
     </StyledPanel>
   );

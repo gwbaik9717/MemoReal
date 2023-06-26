@@ -68,15 +68,16 @@ const Toolbar: React.FC = () => {
 
   const onUpload = (e: any) => {
     const file = e.target.files[0];
+    const formData = new FormData();
     const reader = new FileReader();
-    reader.readAsDataURL(file);
 
-    return new Promise<void>((resolve) => {
-      reader.onload = () => {
-        setImageSrc(reader.result ?? null); // 파일의 컨텐츠
-        resolve();
-      };
-    });
+    reader.onload = function (e: any) {
+      formData.append("file", new Blob([e.target.result], { type: file.type }));
+      const imageUrl = URL.createObjectURL(file);
+      setImageSrc(imageUrl ?? null); // 파일의 컨텐츠
+    };
+
+    reader.readAsArrayBuffer(file);
   };
 
   const handleClick = () => {
