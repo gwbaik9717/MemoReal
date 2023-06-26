@@ -27,7 +27,6 @@ const customStyles = {
 
 const StyledPanel = styled.div`
   position: absolute;
-  border: 1px solid black;
   box-sizing: border-box;
 
   .panel_container {
