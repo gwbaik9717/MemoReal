@@ -4,6 +4,7 @@ import Calendar from "react-calendar";
 import CalendarTile from "./tile";
 import { DiaryMode, setDiaryMode } from "../../store/slices/diarySlice";
 import { useAppDispatch } from "../../store/config";
+import { useNavigate } from "react-router-dom";
 // import "react-calendar/dist/Calendar.css";
 interface Props {
   year: number;
@@ -113,9 +114,13 @@ const CalendarPage = forwardRef(function Page(
 ) {
   const [calendarDate, setCalendarDate] = useState(new Date(year, month));
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const onClickDay = (value: Date, event: any) => {
-    dispatch(setDiaryMode(DiaryMode.editor));
+    // dispatch(setDiaryMode(DiaryMode.editor));
+    // open in new tab
+    window.open("/edit", "_blank");
+    // navigate("/edit");
   };
 
   return (

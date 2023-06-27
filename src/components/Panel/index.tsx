@@ -13,17 +13,25 @@ import Resizer from "./Resizer";
 import { Direction } from "./Resizer/constants";
 import Modal from "react-modal";
 import { ImageElement } from "../Designs/ImageElement/imageElement";
+import Loader from "../Loader";
 
-const customStyles = {
+const customStyles = (loading: boolean) => ({
   content: {
     top: "50%",
     left: "50%",
     right: "auto",
     bottom: "auto",
     marginRight: "-50%",
-    transform: "translate(-50%, -50%)"
+    transform: "translate(-50%, -50%)",
+    width: "300px",
+    height: "300px",
+    background: loading ? "transparent" : "rgba(255, 255, 255)",
+    border: loading ? "none" : "1px solid #ededed",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center"
   }
-};
+});
 
 const StyledContextMenu = styled.div<StyledProps>`
   position: absolute;
@@ -107,6 +115,7 @@ const Panel: React.FC<Props> = ({ element, children }) => {
     x: 0,
     y: 0
   });
+  const [loading, setLoading] = useState<boolean>(false);
   const dispatch = useAppDispatch();
 
   const { isActivated } = element.metadata;
@@ -249,6 +258,7 @@ const Panel: React.FC<Props> = ({ element, children }) => {
   const [modalIsOpen, setIsOpen] = React.useState(false);
 
   function openModal() {
+    setRightClicked(false);
     setIsOpen(true);
   }
 
@@ -263,6 +273,7 @@ const Panel: React.FC<Props> = ({ element, children }) => {
 
   const extractObjectByCategory = async (category: Category) => {
     const localUrl = (element as ImageElement).src;
+    setLoading(true);
 
     fetch(localUrl)
       .then((response) => response.blob())
@@ -281,6 +292,8 @@ const Panel: React.FC<Props> = ({ element, children }) => {
             return response.json(); // Parse the response as JSON
           })
           .then((data: any) => {
+            setLoading(false);
+
             dispatch(
               editElement({
                 ...element,
@@ -354,47 +367,111 @@ const Panel: React.FC<Props> = ({ element, children }) => {
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
-        style={customStyles}
+        style={customStyles(loading)}
         contentLabel="Example Modal"
       >
-        <button onClick={closeModal}>close</button>
-        <div>추출하고자 하는 대상을 선택해주세요</div>
-        <button
-          onClick={async () => {
-            await extractObjectByCategory(Category.person);
-          }}
-        >
-          사람
-        </button>
-        <button
-          onClick={async () => {
-            await extractObjectByCategory(Category.animal);
-          }}
-        >
-          동물
-        </button>
-        <button>음식</button>
-        <button
-          onClick={async () => {
-            await extractObjectByCategory(Category.vehicle);
-          }}
-        >
-          탈 것
-        </button>
-        <button
-          onClick={async () => {
-            await extractObjectByCategory(Category.food);
-          }}
-        >
-          음식
-        </button>
-        <button
-          onClick={async () => {
-            await extractObjectByCategory(Category.thing);
-          }}
-        >
-          사물
-        </button>
+        {/* <button onClick={closeModal}>close</button> */}
+        {loading ? (
+          <Loader />
+        ) : (
+          <div>
+            <div
+              style={{
+                fontSize: "16px",
+                marginBottom: "10px",
+                textAlign: "center"
+              }}
+            >
+              추출하고자 하는 대상을 선택해주세요
+            </div>
+            <div className="modal-body" style={{ color: "#5a46d5" }}>
+              <div
+                className="btn"
+                onClick={async () => {
+                  await extractObjectByCategory(Category.person);
+                }}
+                style={{
+                  width: "100%",
+                  border: "1px solid #5a46d5",
+                  borderRadius: "50px",
+                  padding: "10px",
+                  marginBottom: "5px",
+                  textAlign: "center",
+                  cursor: "pointer"
+                }}
+              >
+                사람
+              </div>
+              <div
+                className="btn"
+                onClick={async () => {
+                  await extractObjectByCategory(Category.animal);
+                }}
+                style={{
+                  width: "100%",
+                  border: "1px solid #5a46d5",
+                  borderRadius: "50px",
+                  padding: "10px",
+                  marginBottom: "5px",
+                  textAlign: "center",
+                  cursor: "pointer"
+                }}
+              >
+                동물
+              </div>
+              <div
+                className="btn"
+                onClick={async () => {
+                  await extractObjectByCategory(Category.vehicle);
+                }}
+                style={{
+                  width: "100%",
+                  border: "1px solid #5a46d5",
+                  borderRadius: "50px",
+                  padding: "10px",
+                  marginBottom: "5px",
+                  textAlign: "center",
+                  cursor: "pointer"
+                }}
+              >
+                탈 것
+              </div>
+              <div
+                className="btn"
+                onClick={async () => {
+                  await extractObjectByCategory(Category.food);
+                }}
+                style={{
+                  width: "100%",
+                  border: "1px solid #5a46d5",
+                  borderRadius: "50px",
+                  padding: "10px",
+                  marginBottom: "5px",
+                  textAlign: "center",
+                  cursor: "pointer"
+                }}
+              >
+                음식
+              </div>
+              <div
+                className="btn"
+                onClick={async () => {
+                  await extractObjectByCategory(Category.thing);
+                }}
+                style={{
+                  width: "100%",
+                  border: "1px solid #5a46d5",
+                  borderRadius: "50px",
+                  padding: "10px",
+                  textAlign: "center",
+                  cursor: "pointer"
+                }}
+              >
+                사물
+              </div>
+            </div>
+          </div>
+        )}
       </Modal>
     </StyledPanel>
   );
