@@ -1,5 +1,16 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ElementMetadata } from "../../components/Designs/Element/element";
+import {
+  ElementMetadata,
+  ElementType
+} from "../../components/Designs/Element/element";
+import { page1 } from "../../data/templates/page1";
+import { page2 } from "../../data/templates/page2";
+import { page3 } from "../../data/templates/page3";
+import { page4 } from "../../data/templates/page4";
+import { page5 } from "../../data/templates/page5";
+import { page6 } from "../../data/templates/page6";
+import { page7 } from "../../data/templates/page7";
+import { page8 } from "../../data/templates/page8";
 import { Page } from "./pageSlice";
 
 export enum DiaryMode {
@@ -16,10 +27,18 @@ export interface Diary {
 const initialState: Diary = {
   mode: DiaryMode.calendar,
   pages: [
-    { id: "1", elements: [], isLeftPage: false },
-    { id: "2", elements: [], isLeftPage: false },
-    { id: "3", elements: [], isLeftPage: false },
-    { id: "4", elements: [], isLeftPage: false }
+    {
+      id: "1",
+      elements: page1,
+      isLeftPage: false
+    },
+    { id: "2", elements: page2, isLeftPage: false },
+    { id: "3", elements: page3, isLeftPage: false },
+    { id: "4", elements: page4, isLeftPage: false },
+    { id: "5", elements: page5, isLeftPage: false },
+    { id: "6", elements: page6, isLeftPage: false },
+    { id: "7", elements: page7, isLeftPage: false },
+    { id: "8", elements: page8, isLeftPage: false }
   ]
 };
 
