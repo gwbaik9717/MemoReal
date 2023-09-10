@@ -77,7 +77,9 @@ const Toolbar: React.FC = () => {
       setImageSrc(imageUrl ?? null); // 파일의 컨텐츠
     };
 
-    reader.readAsArrayBuffer(file);
+    if (file) {
+      reader.readAsArrayBuffer(file);
+    }
   };
 
   const handleClick = () => {

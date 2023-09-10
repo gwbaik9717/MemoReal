@@ -1,10 +1,11 @@
-import React, { forwardRef } from "react";
+import React, { forwardRef, useCallback, useEffect, useState } from "react";
 import styled, { css } from "styled-components";
 import type { ImageElement as ImageElementType } from "../Designs/ImageElement/imageElement";
 import { ElementType } from "../Designs/Element/element";
 import ImageElement from "../Designs/ImageElement";
 import { deactivateAllElements, Page } from "../../store/slices/pageSlice";
 import { useAppDispatch } from "../../store/config";
+import ImageCanvas from "./ImageCanvas";
 
 interface Props {
   page: Page;
@@ -96,10 +97,11 @@ const DiaryPage = forwardRef(function Page(
       onClick={handleClick}
       ref={ref}
     >
-      {/* <p>{page.id}</p> */}
       {imageElements.map((element) => (
         <ImageElement key={element.id} element={element} />
       ))}
+
+      {/* <ImageCanvas /> */}
 
       {isLeftPage ? (
         <div
