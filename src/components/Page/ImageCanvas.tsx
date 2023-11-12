@@ -1,10 +1,24 @@
 import React, { useEffect, useRef, useState } from "react";
 
-function CanvasExportWithOverlay() {
+interface Props {
+  imgSrc: string;
+  mode: "erase" | "recovery";
+}
+
+function ImageCanvas({ imgSrc, mode }: Props) {
   const canvasRef = useRef(null);
   const overlayRef = useRef(null);
   const containerRef = useRef<HTMLDivElement>(null); // Reference to the parent div
   const [isDrawing, setIsDrawing] = useState(false);
+
+  useEffect(() => {
+    // if mode is changed, clear overlay canvas definitely
+    const overlay = overlayRef.current as any;
+    const ctx = overlay.getContext("2d");
+
+    // clear overlay canvas
+    ctx.clearRect(0, 0, overlay.width, overlay.height);
+  }, [mode]);
 
   useEffect(() => {
     const canvas = canvasRef.current as any;
@@ -12,11 +26,10 @@ function CanvasExportWithOverlay() {
 
     // Load an image onto the canvas (e.g., replace 'image-url.jpg' with your image URL)
     const image = new Image();
-    image.src =
-      "https://static.waveon.io/img/apps/18146/KakaoTalk_Photo_2023-08-07-10-34-23.jpeg";
+    image.src = imgSrc;
     image.onload = () => {
       const aspectRatio = image.width / image.height;
-      const newWidth = 500;
+      const newWidth = 300;
       const newHeight = newWidth / aspectRatio;
 
       canvas.width = newWidth;
@@ -48,14 +61,14 @@ function CanvasExportWithOverlay() {
     const ctx = overlay.getContext("2d");
     const rect = overlay.getBoundingClientRect();
 
-    const scaleX = overlay.width / overlay.clientWidth;
-    const scaleY = overlay.height / overlay.clientHeight;
+    const scaleX = overlay.width / rect.width;
+    const scaleY = overlay.height / rect.height;
     const x = (e.clientX - rect.left) * scaleX;
     const y = (e.clientY - rect.top) * scaleY;
 
-    // Set drawing properties (e.g., line color and width)
-    ctx.strokeStyle = "red";
-    ctx.lineWidth = 5 * scaleX;
+    // Set drawing properties
+    ctx.strokeStyle = mode === "erase" ? "rgb(255, 0, 0)" : "rgb(0, 255, 0)";
+    ctx.lineWidth = 5 * scaleX; // Adjust line width based on canvas size
     ctx.lineJoin = "round";
 
     // Draw a line to the current mouse position
@@ -69,8 +82,22 @@ function CanvasExportWithOverlay() {
     const overlay = overlayRef.current as any;
     const link = document.createElement("a");
 
-    // Convert the overlay canvas content to a data URL (PNG)
-    const dataURL = overlay.toDataURL("image/png");
+    // Create a temporary canvas to adjust the size
+    const tempCanvas = document.createElement("canvas");
+    const tempCtx = tempCanvas.getContext("2d");
+
+    // Get the actual size of the overlay canvas
+    const rect = overlay.getBoundingClientRect();
+
+    // Set the size of the temporary canvas to the actual size of the overlay canvas
+    tempCanvas.width = rect.width;
+    tempCanvas.height = rect.height;
+
+    // Draw the overlay canvas onto the temporary canvas
+    tempCtx?.drawImage(overlay, 0, 0, tempCanvas.width, tempCanvas.height);
+
+    // Convert the temporary canvas content to a data URL (PNG)
+    const dataURL = tempCanvas.toDataURL("image/png");
 
     // Set the data URL as the link's href
     link.href = dataURL;
@@ -94,7 +121,9 @@ function CanvasExportWithOverlay() {
           style={{
             position: "absolute",
             top: 0,
-            left: 0
+            left: 0,
+            width: "100%",
+            height: "100%"
           }}
           onMouseDown={startDrawing}
           onMouseUp={endDrawing}
@@ -116,4 +145,4 @@ function CanvasExportWithOverlay() {
   );
 }
 
-export default CanvasExportWithOverlay;
+export default ImageCanvas;
