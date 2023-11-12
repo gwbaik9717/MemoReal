@@ -45,13 +45,28 @@ function ImageCanvas({ imgSrc, mode }: Props) {
     };
   }, []);
 
-  const startDrawing = (e: any) => {
-    setIsDrawing(true);
-    draw(e);
-  };
+  // const startDrawing = (e: any) => {
+  //   setIsDrawing(true);
+  //   draw(e);
+  // };
 
   const endDrawing = () => {
     setIsDrawing(false);
+  };
+
+  const startDrawing = (e: any) => {
+    setIsDrawing(true);
+
+    const overlay = overlayRef.current as any;
+    const ctx = overlay.getContext("2d");
+    const rect = overlay.getBoundingClientRect();
+    const scaleX = overlay.width / rect.width;
+    const scaleY = overlay.height / rect.height;
+    const x = (e.clientX - rect.left) * scaleX;
+    const y = (e.clientY - rect.top) * scaleY;
+
+    ctx.beginPath();
+    ctx.moveTo(x, y);
   };
 
   const draw = (e: any) => {
