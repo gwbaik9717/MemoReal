@@ -2,10 +2,21 @@ import React, { useEffect, useRef, useState } from "react";
 
 interface Props {
   imgSrc: string;
-  mode: "erase" | "recovery";
+  mode: "erase" | "keep";
+  category: "ai" | "edge";
+  setPreviewImage: (imgSrc: string) => void;
+  onClickFinish: () => void;
+  setLoading: (isLoading: boolean) => void;
 }
 
-function ImageCanvas({ imgSrc, mode }: Props) {
+function ImageCanvas({
+  category,
+  imgSrc,
+  mode,
+  setPreviewImage,
+  onClickFinish,
+  setLoading
+}: Props) {
   const canvasRef = useRef(null);
   const overlayRef = useRef(null);
   const containerRef = useRef<HTMLDivElement>(null); // Reference to the parent div
@@ -43,12 +54,7 @@ function ImageCanvas({ imgSrc, mode }: Props) {
       // Draw the image on the canvas
       ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
     };
-  }, []);
-
-  // const startDrawing = (e: any) => {
-  //   setIsDrawing(true);
-  //   draw(e);
-  // };
+  }, [imgSrc]);
 
   const endDrawing = () => {
     setIsDrawing(false);
@@ -93,9 +99,8 @@ function ImageCanvas({ imgSrc, mode }: Props) {
     ctx.stroke();
   };
 
-  const exportOverlayAsPNG = () => {
+  const exportOverlayAsPNG = async () => {
     const overlay = overlayRef.current as any;
-    const link = document.createElement("a");
 
     // Create a temporary canvas to adjust the size
     const tempCanvas = document.createElement("canvas");
@@ -114,12 +119,36 @@ function ImageCanvas({ imgSrc, mode }: Props) {
     // Convert the temporary canvas content to a data URL (PNG)
     const dataURL = tempCanvas.toDataURL("image/png");
 
-    // Set the data URL as the link's href
-    link.href = dataURL;
-    link.download = "overlay_drawing.png";
+    // Convert data URL to blob
+    const response = await fetch(dataURL);
+    const blobData = await response.blob();
 
-    // Trigger a click on the link to start the download
-    link.click();
+    const formData = new FormData();
+    formData.set("image", blobData, "overlay_drawing.png");
+
+    const requestOptions = {
+      method: "POST",
+      body: formData
+    };
+
+    // Send the FormData object as a POST request to the API server
+    fetch(`http://15.165.43.54:3000/images/custom/${mode}`, requestOptions)
+      .then((response: any) => {
+        return response.json(); // Parse the response as JSON
+      })
+      .then((data: any) => {
+        setPreviewImage(data.imageUrl);
+      })
+      .catch((error) => {
+        // Handle any errors that occur during the request
+        console.error("Error:", error);
+      });
+  };
+
+  const onClickCustomize = async () => {
+    setLoading(true);
+    await exportOverlayAsPNG();
+    setLoading(false);
   };
 
   return (
@@ -146,15 +175,19 @@ function ImageCanvas({ imgSrc, mode }: Props) {
         />
       </div>
 
+      <div className="" onClick={onClickCustomize}>
+        적용하기
+      </div>
+
       <button
-        onClick={exportOverlayAsPNG}
         style={{
           position: "absolute",
           top: 0,
           left: 0
         }}
+        onClick={onClickFinish}
       >
-        Export as PNG
+        종료하기
       </button>
     </div>
   );

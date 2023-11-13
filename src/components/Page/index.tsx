@@ -101,8 +101,6 @@ const DiaryPage = forwardRef(function Page(
         <ImageElement key={element.id} element={element} />
       ))}
 
-      {/* <ImageCanvas /> */}
-
       {isLeftPage ? (
         <div
           className="navigation"

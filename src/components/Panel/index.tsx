@@ -14,6 +14,7 @@ import { Direction } from "./Resizer/constants";
 import Modal from "react-modal";
 import { ImageElement } from "../Designs/ImageElement/imageElement";
 import Loader from "../Loader";
+import ImageCanvas from "../Page/ImageCanvas";
 
 const customStyles = (loading: boolean) => ({
   content: {
@@ -23,8 +24,8 @@ const customStyles = (loading: boolean) => ({
     bottom: "auto",
     marginRight: "-50%",
     transform: "translate(-50%, -50%)",
-    width: "300px",
-    height: "300px",
+    width: "500px",
+    height: "500px",
     background: loading ? "transparent" : "rgba(255, 255, 255)",
     border: loading ? "none" : "1px solid #ededed",
     display: "flex",
@@ -90,13 +91,6 @@ const StyledPanel = styled.div`
   }
 `;
 
-enum Category {
-  person = "person",
-  thing = "thing",
-  animal = "animal",
-  food = "food",
-  vehicle = "vehicle"
-}
 interface Props {
   children: React.ReactNode;
   element: Element;
@@ -116,6 +110,12 @@ const Panel: React.FC<Props> = ({ element, children }) => {
     y: 0
   });
   const [loading, setLoading] = useState<boolean>(false);
+  const [previewImage, setPreviewImage] = useState<string>(
+    (element as ImageElement).src
+  );
+  const [currentStep, setCurrentStep] = useState<number>(0);
+  const [currentMode, setCurrentMode] = useState<"erase" | "keep">("erase");
+  const [currentCategory, setCurrentCategory] = useState<"ai" | "edge">("ai");
   const dispatch = useAppDispatch();
 
   const { isActivated } = element.metadata;
@@ -262,16 +262,11 @@ const Panel: React.FC<Props> = ({ element, children }) => {
     setIsOpen(true);
   }
 
-  // function afterOpenModal() {
-  //   // references are now sync'd and can be accessed.
-  //   subtitle.style.color = "#f00";
-  // }
-
   function closeModal() {
     setIsOpen(false);
   }
 
-  const extractObjectByCategory = async (category: Category) => {
+  const extractObjectByCategory = async (category: "ai" | "edge") => {
     const localUrl = (element as ImageElement).src;
     setLoading(true);
 
@@ -287,21 +282,17 @@ const Panel: React.FC<Props> = ({ element, children }) => {
         };
 
         // Send the FormData object as a POST request to the API server
-        fetch(`http://3.37.174.220:3000/images/ai/${category}`, requestOptions)
+        fetch(
+          `http://15.165.43.54:3000/images/extract/${category}`,
+          requestOptions
+        )
           .then((response: any) => {
             return response.json(); // Parse the response as JSON
           })
           .then((data: any) => {
             setLoading(false);
 
-            dispatch(
-              editElement({
-                ...element,
-                src: data.imageUrl
-              })
-            );
-
-            closeModal();
+            setPreviewImage(data.imageUrl);
           })
           .catch((error) => {
             // Handle any errors that occur during the request
@@ -310,6 +301,61 @@ const Panel: React.FC<Props> = ({ element, children }) => {
       })
       .catch((error) => {
         // Handle any errors
+        console.error("Error:", error);
+      });
+  };
+
+  const onClickManualExtract = async () => {
+    await fetch("http://15.165.43.54:3000/images/custom", {
+      method: "GET"
+    })
+      .then((response: any) => {
+        return response.json(); // Parse the response as JSON
+      })
+      .then((data: any) => {
+        setLoading(false);
+
+        setPreviewImage(data.imageUrl);
+      })
+      .catch((error) => {
+        // Handle any errors that occur during the request
+        console.error("Error:", error);
+      });
+
+    setCurrentStep(2);
+  };
+
+  const onClickDrawMode = (mode: "erase" | "keep") => {
+    setCurrentMode(mode);
+  };
+
+  const onClickCategory = async (mode: "ai" | "edge") => {
+    setCurrentCategory(mode);
+    await extractObjectByCategory(mode);
+    setCurrentStep(1);
+  };
+
+  const onClickFinish = async () => {
+    await fetch("http://15.165.43.54:3000/images/result", {
+      method: "GET"
+    })
+      .then((response: any) => {
+        return response.json(); // Parse the response as JSON
+      })
+      .then((data: any) => {
+        console.log(data.imageUrl);
+        // onClickFinish(data.imageUrl);
+
+        dispatch(
+          editElement({
+            ...element,
+            src: data.imageUrl
+          })
+        );
+        closeModal();
+      })
+      .catch((error) => {
+        // Handle any errors that occur during the request
         console.error("Error:", error);
       });
   };
@@ -385,90 +431,79 @@ const Panel: React.FC<Props> = ({ element, children }) => {
               추출하고자 하는 대상을 선택해주세요
             </div>
             <div className="modal-body" style={{ color: "#5a46d5" }}>
-              <div
-                className="btn"
-                onClick={async () => {
-                  await extractObjectByCategory(Category.person);
-                }}
-                style={{
-                  width: "100%",
-                  border: "1px solid #5a46d5",
-                  borderRadius: "50px",
-                  padding: "10px",
-                  marginBottom: "5px",
-                  textAlign: "center",
-                  cursor: "pointer"
-                }}
-              >
-                사람
-              </div>
-              <div
-                className="btn"
-                onClick={async () => {
-                  await extractObjectByCategory(Category.animal);
-                }}
-                style={{
-                  width: "100%",
-                  border: "1px solid #5a46d5",
-                  borderRadius: "50px",
-                  padding: "10px",
-                  marginBottom: "5px",
-                  textAlign: "center",
-                  cursor: "pointer"
-                }}
-              >
-                동물
-              </div>
-              <div
-                className="btn"
-                onClick={async () => {
-                  await extractObjectByCategory(Category.vehicle);
-                }}
-                style={{
-                  width: "100%",
-                  border: "1px solid #5a46d5",
-                  borderRadius: "50px",
-                  padding: "10px",
-                  marginBottom: "5px",
-                  textAlign: "center",
-                  cursor: "pointer"
-                }}
-              >
-                탈 것
-              </div>
-              <div
-                className="btn"
-                onClick={async () => {
-                  await extractObjectByCategory(Category.food);
-                }}
-                style={{
-                  width: "100%",
-                  border: "1px solid #5a46d5",
-                  borderRadius: "50px",
-                  padding: "10px",
-                  marginBottom: "5px",
-                  textAlign: "center",
-                  cursor: "pointer"
-                }}
-              >
-                음식
-              </div>
-              <div
-                className="btn"
-                onClick={async () => {
-                  await extractObjectByCategory(Category.thing);
-                }}
-                style={{
-                  width: "100%",
-                  border: "1px solid #5a46d5",
-                  borderRadius: "50px",
-                  padding: "10px",
-                  textAlign: "center",
-                  cursor: "pointer"
-                }}
-              >
-                사물
-              </div>
+              {currentStep === 0 && (
+                <>
+                  <img width={300} src={previewImage} draggable="false" />
+                  <div>
+                    <div
+                      className=""
+                      onClick={async () => {
+                        await onClickCategory("ai");
+                      }}
+                    >
+                      사진
+                    </div>
+                    <div
+                      className=""
+                      onClick={async () => {
+                        await onClickCategory("edge");
+                      }}
+                    >
+                      일러스트
+                    </div>
+                  </div>
+                </>
+              )}
+
+              {currentStep === 1 && (
+                <>
+                  <img width={300} src={previewImage} />
+                  <div>
+                    <div
+                      className=""
+                      onClick={async () => {
+                        await onClickManualExtract();
+                      }}
+                    >
+                      직접추출
+                    </div>
+                    <div className="" onClick={onClickFinish}>
+                      완료
+                    </div>
+                  </div>
+                </>
+              )}
+
+              {currentStep === 2 && (
+                <>
+                  <ImageCanvas
+                    imgSrc={previewImage}
+                    mode={currentMode}
+                    category={currentCategory}
+                    onClickFinish={onClickFinish}
+                    setPreviewImage={setPreviewImage}
+                    setLoading={setLoading}
+                  />
+                  <div>
+                    <div
+                      className=""
+                      onClick={() => {
+                        onClickDrawMode("erase");
+                      }}
+                    >
+                      지우기
+                    </div>
+                    <div
+                      className=""
+                      onClick={() => {
+                        onClickDrawMode("keep");
+                      }}
+                    >
+                      복구
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         )}
