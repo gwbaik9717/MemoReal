@@ -11,7 +11,8 @@ export const page1 = [
     src: "https://static.waveon.io/img/apps/18146/1_1687964080575.png",
     metadata: {
       isActivated: false
-    }
+    },
+    animation: null
   },
   {
     id: "2",
@@ -23,7 +24,8 @@ export const page1 = [
     src: "https://static.waveon.io/img/apps/18146/2.gif",
     metadata: {
       isActivated: false
-    }
+    },
+    animation: null
   },
   {
     id: "3",
@@ -35,7 +37,8 @@ export const page1 = [
     src: "https://static.waveon.io/img/apps/18146/3.gif",
     metadata: {
       isActivated: false
-    }
+    },
+    animation: null
   },
   {
     id: "4",
@@ -47,7 +50,8 @@ export const page1 = [
     src: "https://static.waveon.io/img/apps/18146/4.png",
     metadata: {
       isActivated: false
-    }
+    },
+    animation: null
   },
   {
     id: "5",
@@ -59,7 +63,8 @@ export const page1 = [
     src: "https://static.waveon.io/img/apps/18146/5.png",
     metadata: {
       isActivated: false
-    }
+    },
+    animation: null
   },
   {
     id: "6",
@@ -71,7 +76,8 @@ export const page1 = [
     src: "https://static.waveon.io/img/apps/18146/6.png",
     metadata: {
       isActivated: false
-    }
+    },
+    animation: null
   },
   {
     id: "7",
@@ -83,7 +89,8 @@ export const page1 = [
     src: "https://static.waveon.io/img/apps/18146/7.png",
     metadata: {
       isActivated: false
-    }
+    },
+    animation: null
   },
   {
     id: "8",
@@ -95,7 +102,8 @@ export const page1 = [
     src: "https://static.waveon.io/img/apps/18146/8.png",
     metadata: {
       isActivated: false
-    }
+    },
+    animation: null
   },
   {
     id: "9",
@@ -107,7 +115,8 @@ export const page1 = [
     src: "https://static.waveon.io/img/apps/18146/9_1687930308230.png",
     metadata: {
       isActivated: false
-    }
+    },
+    animation: null
   },
   {
     id: "10",
@@ -119,7 +128,8 @@ export const page1 = [
     src: "https://static.waveon.io/img/apps/18146/10.png",
     metadata: {
       isActivated: false
-    }
+    },
+    animation: null
   },
   {
     id: "11",
@@ -131,7 +141,8 @@ export const page1 = [
     src: "https://static.waveon.io/img/apps/18146/11.png",
     metadata: {
       isActivated: false
-    }
+    },
+    animation: null
   },
   {
     id: "12",
@@ -143,7 +154,8 @@ export const page1 = [
     src: "https://static.waveon.io/img/apps/18146/12.png",
     metadata: {
       isActivated: false
-    }
+    },
+    animation: null
   },
   {
     id: "13",
@@ -155,7 +167,8 @@ export const page1 = [
     src: "https://static.waveon.io/img/apps/18146/13.png",
     metadata: {
       isActivated: false
-    }
+    },
+    animation: null
   },
   {
     id: "14",
@@ -167,7 +180,8 @@ export const page1 = [
     src: "https://static.waveon.io/img/apps/18146/14.png",
     metadata: {
       isActivated: false
-    }
+    },
+    animation: null
   },
   {
     id: "15",
@@ -179,7 +193,8 @@ export const page1 = [
     src: "https://static.waveon.io/img/apps/18146/15.png",
     metadata: {
       isActivated: false
-    }
+    },
+    animation: null
   },
   {
     id: "16",
@@ -191,7 +206,8 @@ export const page1 = [
     src: "https://static.waveon.io/img/apps/18146/16.png",
     metadata: {
       isActivated: false
-    }
+    },
+    animation: null
   },
   {
     id: "17",
@@ -203,7 +219,8 @@ export const page1 = [
     src: "https://static.waveon.io/img/apps/18146/17.png",
     metadata: {
       isActivated: false
-    }
+    },
+    animation: null
   },
   {
     id: "18",
@@ -215,7 +232,8 @@ export const page1 = [
     src: "https://static.waveon.io/img/apps/18146/18.png",
     metadata: {
       isActivated: false
-    }
+    },
+    animation: null
   },
   {
     id: "19",
@@ -227,7 +245,8 @@ export const page1 = [
     src: "https://static.waveon.io/img/apps/18146/19.png",
     metadata: {
       isActivated: false
-    }
+    },
+    animation: null
   },
   {
     id: "20",
@@ -239,7 +258,8 @@ export const page1 = [
     src: "https://static.waveon.io/img/apps/18146/20.png",
     metadata: {
       isActivated: false
-    }
+    },
+    animation: null
   },
   {
     id: "21",
@@ -251,7 +271,8 @@ export const page1 = [
     src: "https://static.waveon.io/img/apps/18146/21.png",
     metadata: {
       isActivated: false
-    }
+    },
+    animation: null
   },
   {
     id: "22",
@@ -263,7 +284,8 @@ export const page1 = [
     src: "https://static.waveon.io/img/apps/18146/22.png",
     metadata: {
       isActivated: false
-    }
+    },
+    animation: null
   },
   {
     id: "23",
@@ -275,7 +297,8 @@ export const page1 = [
     src: "https://static.waveon.io/img/apps/18146/23.png",
     metadata: {
       isActivated: false
-    }
+    },
+    animation: null
   },
   {
     id: "24",
@@ -287,7 +310,8 @@ export const page1 = [
     src: "https://static.waveon.io/img/apps/18146/24.png",
     metadata: {
       isActivated: false
-    }
+    },
+    animation: null
   },
   {
     id: "25",
@@ -299,6 +323,7 @@ export const page1 = [
     src: "https://static.waveon.io/img/apps/18146/25.png",
     metadata: {
       isActivated: false
-    }
+    },
+    animation: null
   }
 ];

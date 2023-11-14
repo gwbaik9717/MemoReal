@@ -8,7 +8,7 @@ import {
   moveElement,
   setElementPositionAndSize
 } from "../../store/slices/pageSlice";
-import { Element } from "../Designs/Element/element";
+import { Element, ElementAnimation } from "../Designs/Element/element";
 import Resizer from "./Resizer";
 import { Direction } from "./Resizer/constants";
 import Modal from "react-modal";
@@ -93,7 +93,7 @@ const StyledPanel = styled.div`
 
 interface Props {
   children: React.ReactNode;
-  element: Element;
+  element: ImageElement;
 }
 interface StyledProps {
   top: number;
@@ -110,12 +110,13 @@ const Panel: React.FC<Props> = ({ element, children }) => {
     y: 0
   });
   const [loading, setLoading] = useState<boolean>(false);
-  const [previewImage, setPreviewImage] = useState<string>(
-    (element as ImageElement).src
-  );
+  const [previewImage, setPreviewImage] = useState<string>(element.src);
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [currentMode, setCurrentMode] = useState<"erase" | "keep">("erase");
   const [currentCategory, setCurrentCategory] = useState<"ai" | "edge">("ai");
+  const [modalIsOpen, setIsOpen] = useState(false);
+  const [animationModelIsOpen, setAnimationIsOpen] = useState<boolean>(false);
+
   const dispatch = useAppDispatch();
 
   const { isActivated } = element.metadata;
@@ -255,11 +256,14 @@ const Panel: React.FC<Props> = ({ element, children }) => {
     }
   };
 
-  const [modalIsOpen, setIsOpen] = React.useState(false);
-
   function openModal() {
     setRightClicked(false);
     setIsOpen(true);
+  }
+
+  function openAnimationModal() {
+    setRightClicked(false);
+    setAnimationIsOpen(true);
   }
 
   function closeModal() {
@@ -267,7 +271,7 @@ const Panel: React.FC<Props> = ({ element, children }) => {
   }
 
   const extractObjectByCategory = async (category: "ai" | "edge") => {
-    const localUrl = (element as ImageElement).src;
+    const localUrl = element.src;
     setLoading(true);
 
     fetch(localUrl)
@@ -343,9 +347,6 @@ const Panel: React.FC<Props> = ({ element, children }) => {
         return response.json(); // Parse the response as JSON
       })
       .then((data: any) => {
-        console.log(data.imageUrl);
-        // onClickFinish(data.imageUrl);
-
         dispatch(
           editElement({
             ...element,
@@ -358,6 +359,16 @@ const Panel: React.FC<Props> = ({ element, children }) => {
         // Handle any errors that occur during the request
         console.error("Error:", error);
       });
+  };
+
+  const onClickSetAnimation = (animation: ElementAnimation | null) => {
+    dispatch(
+      editElement({
+        ...element,
+        animation
+      })
+    );
+    setAnimationIsOpen(false);
   };
 
   return (
@@ -399,6 +410,7 @@ const Panel: React.FC<Props> = ({ element, children }) => {
               <StyledContextMenu top={points.y} left={points.x}>
                 <ul>
                   <li onClick={openModal}>추출</li>
+                  <li onClick={openAnimationModal}>애니메이션</li>
                 </ul>
               </StyledContextMenu>
             )}
@@ -409,6 +421,38 @@ const Panel: React.FC<Props> = ({ element, children }) => {
           </div>
         )}
       </div>
+
+      <Modal
+        isOpen={animationModelIsOpen}
+        onRequestClose={() => {
+          setAnimationIsOpen(false);
+        }}
+        style={customStyles(false)}
+      >
+        <ul>
+          <li
+            onClick={() => {
+              onClickSetAnimation(ElementAnimation.shake);
+            }}
+          >
+            흔들기
+          </li>
+          <li
+            onClick={() => {
+              onClickSetAnimation(ElementAnimation.bounce);
+            }}
+          >
+            튀기기
+          </li>
+          <li
+            onClick={() => {
+              onClickSetAnimation(null);
+            }}
+          >
+            추출
+          </li>
+        </ul>
+      </Modal>
 
       <Modal
         isOpen={modalIsOpen}

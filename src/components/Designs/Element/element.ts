@@ -2,9 +2,15 @@ export enum ElementType {
   image = "ImageElement",
   text = "TextElement"
 }
-
 export class ElementMetadata {
   isActivated: boolean = false;
+}
+
+export enum ElementAnimation {
+  shake = "shake",
+  fade = "fade",
+  bounce = "bounce",
+  zoom = "zoom"
 }
 
 export class Element {
@@ -15,4 +21,5 @@ export class Element {
   type!: ElementType;
   id!: string;
   metadata: ElementMetadata = new ElementMetadata();
+  animation: ElementAnimation | null = null;
 }

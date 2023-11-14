@@ -11,6 +11,7 @@ export const page8 = [
     src: "https://static.waveon.io/img/apps/18146/8_1687964303833.png",
     metadata: {
       isActivated: false
-    }
+    },
+    animation: null
   }
 ];

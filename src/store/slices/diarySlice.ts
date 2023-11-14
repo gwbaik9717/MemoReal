@@ -1,8 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import {
-  ElementMetadata,
-  ElementType
-} from "../../components/Designs/Element/element";
+import { ElementMetadata } from "../../components/Designs/Element/element";
 import { page1 } from "../../data/templates/page1";
 import { page2 } from "../../data/templates/page2";
 import { page3 } from "../../data/templates/page3";
