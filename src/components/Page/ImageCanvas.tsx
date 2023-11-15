@@ -175,20 +175,47 @@ function ImageCanvas({
         />
       </div>
 
-      <div className="" onClick={onClickCustomize}>
-        적용하기
-      </div>
-
-      <button
+      <div
         style={{
-          position: "absolute",
-          top: 0,
-          left: 0
+          display: "flex"
         }}
-        onClick={onClickFinish}
       >
-        종료하기
-      </button>
+        <div
+          className=""
+          onClick={onClickCustomize}
+          style={{
+            width: "50%",
+            border: "1px solid #5a46d5",
+            borderRadius: "50px",
+            padding: "10px",
+            marginBottom: "5px",
+            textAlign: "center",
+            cursor: "pointer",
+            paddingLeft: "30px",
+            paddingRight: "30px"
+          }}
+        >
+          적용하기
+        </div>
+
+        <button
+          onClick={onClickFinish}
+          style={{
+            width: "50%",
+            border: "1px solid #5a46d5",
+            borderRadius: "50px",
+            padding: "10px",
+            marginBottom: "5px",
+            textAlign: "center",
+            cursor: "pointer",
+            paddingLeft: "30px",
+            paddingRight: "30px",
+            marginLeft: "5px"
+          }}
+        >
+          종료하기
+        </button>
+      </div>
     </div>
   );
 }

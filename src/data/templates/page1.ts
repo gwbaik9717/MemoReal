@@ -1,4 +1,7 @@
-import { ElementType } from "../../components/Designs/Element/element";
+import {
+  ElementAnimation,
+  ElementType
+} from "../../components/Designs/Element/element";
 
 export const page1 = [
   {
@@ -12,7 +15,7 @@ export const page1 = [
     metadata: {
       isActivated: false
     },
-    animation: null
+    animation: ElementAnimation.bounce
   },
   {
     id: "2",
@@ -38,7 +41,7 @@ export const page1 = [
     metadata: {
       isActivated: false
     },
-    animation: null
+    animation: ElementAnimation.bounce
   },
   {
     id: "4",
@@ -51,7 +54,7 @@ export const page1 = [
     metadata: {
       isActivated: false
     },
-    animation: null
+    animation: ElementAnimation.bounce
   },
   {
     id: "5",
@@ -64,7 +67,7 @@ export const page1 = [
     metadata: {
       isActivated: false
     },
-    animation: null
+    animation: ElementAnimation.bounce
   },
   {
     id: "6",
@@ -155,7 +158,7 @@ export const page1 = [
     metadata: {
       isActivated: false
     },
-    animation: null
+    animation: ElementAnimation.shake
   },
   {
     id: "13",
@@ -181,7 +184,7 @@ export const page1 = [
     metadata: {
       isActivated: false
     },
-    animation: null
+    animation: ElementAnimation.shake
   },
   {
     id: "15",
@@ -207,7 +210,7 @@ export const page1 = [
     metadata: {
       isActivated: false
     },
-    animation: null
+    animation: ElementAnimation.bounce
   },
   {
     id: "17",

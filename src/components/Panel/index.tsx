@@ -56,6 +56,7 @@ const StyledContextMenu = styled.div<StyledProps>`
   }
   ul li {
     cursor: pointer;
+    padding: 10px;
   }
 `;
 
@@ -427,12 +428,23 @@ const Panel: React.FC<Props> = ({ element, children }) => {
         onRequestClose={() => {
           setAnimationIsOpen(false);
         }}
-        style={customStyles(false)}
+        style={customStyles(loading)}
       >
         <ul>
           <li
             onClick={() => {
               onClickSetAnimation(ElementAnimation.shake);
+            }}
+            style={{
+              width: "100%",
+              border: "1px solid #5a46d5",
+              borderRadius: "50px",
+              padding: "10px",
+              marginBottom: "5px",
+              textAlign: "center",
+              cursor: "pointer",
+              paddingLeft: "30px",
+              paddingRight: "30px"
             }}
           >
             흔들기
@@ -441,6 +453,17 @@ const Panel: React.FC<Props> = ({ element, children }) => {
             onClick={() => {
               onClickSetAnimation(ElementAnimation.bounce);
             }}
+            style={{
+              width: "100%",
+              border: "1px solid #5a46d5",
+              borderRadius: "50px",
+              padding: "10px",
+              marginBottom: "5px",
+              textAlign: "center",
+              cursor: "pointer",
+              paddingLeft: "30px",
+              paddingRight: "30px"
+            }}
           >
             튀기기
           </li>
@@ -448,8 +471,19 @@ const Panel: React.FC<Props> = ({ element, children }) => {
             onClick={() => {
               onClickSetAnimation(null);
             }}
+            style={{
+              width: "100%",
+              border: "1px solid #5a46d5",
+              borderRadius: "50px",
+              padding: "10px",
+              marginBottom: "5px",
+              textAlign: "center",
+              cursor: "pointer",
+              paddingLeft: "30px",
+              paddingRight: "30px"
+            }}
           >
-            추출
+            제거
           </li>
         </ul>
       </Modal>
@@ -478,11 +512,28 @@ const Panel: React.FC<Props> = ({ element, children }) => {
               {currentStep === 0 && (
                 <>
                   <img width={300} src={previewImage} draggable="false" />
-                  <div>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      marginTop: "10px"
+                    }}
+                  >
                     <div
                       className=""
                       onClick={async () => {
                         await onClickCategory("ai");
+                      }}
+                      style={{
+                        width: "100%",
+                        border: "1px solid #5a46d5",
+                        borderRadius: "50px",
+                        padding: "10px",
+                        marginBottom: "5px",
+                        textAlign: "center",
+                        cursor: "pointer",
+                        paddingLeft: "30px",
+                        paddingRight: "30px"
                       }}
                     >
                       사진
@@ -491,6 +542,18 @@ const Panel: React.FC<Props> = ({ element, children }) => {
                       className=""
                       onClick={async () => {
                         await onClickCategory("edge");
+                      }}
+                      style={{
+                        width: "100%",
+                        border: "1px solid #5a46d5",
+                        borderRadius: "50px",
+                        padding: "10px",
+                        marginBottom: "5px",
+                        textAlign: "center",
+                        cursor: "pointer",
+                        paddingLeft: "30px",
+                        paddingRight: "30px",
+                        marginLeft: "5px"
                       }}
                     >
                       일러스트
@@ -502,16 +565,46 @@ const Panel: React.FC<Props> = ({ element, children }) => {
               {currentStep === 1 && (
                 <>
                   <img width={300} src={previewImage} />
-                  <div>
+                  <div
+                    style={{
+                      display: "flex"
+                    }}
+                  >
                     <div
                       className=""
                       onClick={async () => {
                         await onClickManualExtract();
                       }}
+                      style={{
+                        width: "100%",
+                        border: "1px solid #5a46d5",
+                        borderRadius: "50px",
+                        padding: "10px",
+                        marginBottom: "5px",
+                        textAlign: "center",
+                        cursor: "pointer",
+                        paddingLeft: "30px",
+                        paddingRight: "30px"
+                      }}
                     >
                       직접추출
                     </div>
-                    <div className="" onClick={onClickFinish}>
+                    <div
+                      className=""
+                      onClick={onClickFinish}
+                      style={{
+                        width: "100%",
+                        border: "1px solid #5a46d5",
+                        borderRadius: "50px",
+                        padding: "10px",
+                        marginBottom: "5px",
+                        textAlign: "center",
+                        cursor: "pointer",
+                        paddingLeft: "30px",
+                        paddingRight: "30px",
+                        marginLeft: "5px"
+                      }}
+                    >
                       완료
                     </div>
                   </div>
@@ -528,11 +621,26 @@ const Panel: React.FC<Props> = ({ element, children }) => {
                     setPreviewImage={setPreviewImage}
                     setLoading={setLoading}
                   />
-                  <div>
+                  <div
+                    style={{
+                      display: "flex"
+                    }}
+                  >
                     <div
                       className=""
                       onClick={() => {
                         onClickDrawMode("erase");
+                      }}
+                      style={{
+                        width: "100%",
+                        border: "1px solid #5a46d5",
+                        borderRadius: "50px",
+                        padding: "10px",
+                        marginBottom: "5px",
+                        textAlign: "center",
+                        cursor: "pointer",
+                        paddingLeft: "30px",
+                        paddingRight: "30px"
                       }}
                     >
                       지우기
@@ -541,6 +649,18 @@ const Panel: React.FC<Props> = ({ element, children }) => {
                       className=""
                       onClick={() => {
                         onClickDrawMode("keep");
+                      }}
+                      style={{
+                        width: "100%",
+                        border: "1px solid #5a46d5",
+                        borderRadius: "50px",
+                        padding: "10px",
+                        marginBottom: "5px",
+                        textAlign: "center",
+                        cursor: "pointer",
+                        paddingLeft: "30px",
+                        paddingRight: "30px",
+                        marginLeft: "5px"
                       }}
                     >
                       복구
